@@ -1,10 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
+    <v-app-bar app color="primary" dark>
       <div class="d-flex align-center">
         <v-img
           alt="Vuetify Logo"
@@ -38,14 +34,15 @@
     </v-app-bar>
 
     <v-main>
-      <HelloWorld/>
+      <HelloWorld />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
-
+import HelloWorld from './components/HelloWorld'
+import { mapState } from 'vuex'
+import dbIdCreation from './utils/dbIdCreation'
 export default {
   name: 'App',
 
@@ -53,8 +50,22 @@ export default {
     HelloWorld,
   },
 
-  data: () => ({
-    //
-  }),
-};
+  data: () => ({}),
+  computed: {
+    ...mapState({
+      dbId: (state) => state.dbId,
+    }),
+  },
+  beforeCreate() {},
+  mounted() {},
+  created() {
+    if (localStorage.dbId) {
+      this.$store.dispatch('updateDbId', { dbId: localStorage.dbId })
+    } else {
+      const newDbId = dbIdCreation
+      localStorage.dbId = newDbId
+      this.$store.dispatch('updateDbId', { dbId: newDbId })
+    }
+  },
+}
 </script>
