@@ -5,10 +5,10 @@
         <v-col cols="9" class="pb-0">
           <div class="d-flex flex-column" style="height: 260px">
             <h4 class="ma-4 text-h4">
-              {{ note.noteTitle || 'Untitled Note' }}
+              {{ note.note_title || 'Untitled Note' }}
             </h4>
             <p class="mx-4 body-1 overflow-auto">
-              {{ note.noteText || 'This note is blank.' }}
+              {{ note.note_text || 'This note is blank.' }}
             </p>
           </div>
         </v-col>

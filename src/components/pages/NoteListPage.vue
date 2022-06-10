@@ -26,7 +26,7 @@ export default {
   computed: {
     ...mapState({
       dbId: (state) => state.dbId,
-      notes: (state) => state.testNotes,
+      notes: (state) => state.notes,
     }),
   },
 }
