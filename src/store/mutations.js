@@ -9,6 +9,7 @@ export default {
     state.addNoteDialog = !state.addNoteDialog
   },
   addNewNote(state, payload) {
-    state.notes.push(payload.newNote)
+    state.addNoteDialog = false
+    state.notes.unshift(payload.addedNote)
   },
 }

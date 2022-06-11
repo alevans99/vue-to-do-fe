@@ -203,12 +203,14 @@ export default {
         title: this.newNoteTitle,
         text: this.newNoteText,
         timestamp: DateTime.now().toUTC().toISO(),
-        priority: this.prioritySelected,
+        priority: Number(this.prioritySelected),
       }
       if (this.deadlineActive) {
         const isoString = `${this.datePicker}T${this.timePicker}`
         const utcIso = DateTime.fromISO(isoString).toUTC().toISO()
         newNote.deadline = utcIso
+      } else {
+        newNote.deadline = null
       }
       this.addNewNote({ newNote })
     },

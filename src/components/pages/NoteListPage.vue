@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row v-for="note in notes" :key="note.noteId">
+    <v-row v-for="note in incompleteNotes" :key="note.noteId">
       <v-col cols="12">
         <SingleNote :note="note" />
       </v-col>
@@ -10,7 +10,7 @@
 
 <script>
 import SingleNote from '../sub-componenets/SingleNote.vue'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   components: { SingleNote },
@@ -28,6 +28,7 @@ export default {
       dbId: (state) => state.dbId,
       notes: (state) => state.notes,
     }),
+    ...mapGetters(['incompleteNotes', 'completeNotes']),
   },
 }
 </script>

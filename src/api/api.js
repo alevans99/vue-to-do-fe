@@ -16,10 +16,9 @@ export const getAllNotes = async (dbId) => {
 export const addNewNote = async (newNote) => {
   try {
     const {
-      data: { addedNote },
-    } = await dbApi.post(`/notes/${newNote.dbId}`, { note: newNote })
-    console.log(addedNote, 'ADD NOTE')
-    return addedNote
+      data: { note },
+    } = await dbApi.post(`/notes/${newNote.listId}`, { note: newNote })
+    return note
   } catch (error) {
     console.log(error)
   }
