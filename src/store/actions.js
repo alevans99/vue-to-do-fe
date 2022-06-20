@@ -1,9 +1,10 @@
-import { getAllNotes, addNewNote } from '@/api/api'
+import { getAllNotes, addNewNote, updateNote } from '@/api/api'
 
 export default {
   updateDbId(context, payload) {
     context.commit('updateDbId', payload)
   },
+
   async getAllNotes(context, payload) {
     try {
       const dbId = context.state.dbId
@@ -16,6 +17,11 @@ export default {
       console.log(error)
     }
   },
+
+  /**
+   * Adding Notes
+   */
+
   toggleAddNoteDialog(context) {
     context.commit('toggleAddNoteDialog')
   },
@@ -24,6 +30,20 @@ export default {
       const addedNote = await addNewNote(payload.newNote)
       payload.addedNote = addedNote
       context.commit('addNewNote', payload)
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  /**
+   * Updating Notes
+   */
+
+  async updateNote(context, payload) {
+    try {
+      const updatedNote = await updateNote(payload.noteToUpdate)
+      payload.updatedNote = updatedNote
+      context.commit('updateNote', payload)
     } catch (error) {
       console.log(error)
     }

@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row v-for="note in incompleteNotes" :key="note.noteId">
+    <v-row v-for="note in notes" :key="note.noteId">
       <v-col cols="12">
         <SingleNote :note="note" />
       </v-col>
