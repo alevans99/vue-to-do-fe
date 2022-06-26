@@ -1,4 +1,4 @@
-import { getAllNotes, addNewNote, updateNote } from '@/api/api'
+import { getAllNotes, addNewNote, updateNote, deleteNote } from '@/api/api'
 
 export default {
   updateDbId(context, payload) {
@@ -57,5 +57,18 @@ export default {
   },
   startEditing(context, payload) {
     context.commit('startEditing', payload)
+  },
+
+  /**
+   * Deleting Notes
+   */
+
+  async deleteNote(context, payload) {
+    try {
+      await deleteNote(payload.noteToDelete)
+      context.commit('deleteNote', payload)
+    } catch (error) {
+      console.log(error)
+    }
   },
 }

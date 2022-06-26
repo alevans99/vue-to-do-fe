@@ -26,7 +26,21 @@
       <v-row>
         <v-col cols="6">
           <v-btn class="ma-4" depressed @click="editNote()">Edit</v-btn>
-          <v-btn class="ma-4" depressed>Delete</v-btn>
+          <v-dialog v-model="deleteDialog" persistent max-width="290">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                Delete
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title class="text-h5"> Delete Note? </v-card-title>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text @click="deleteDialog = false"> Cancel </v-btn>
+                <v-btn text @click="handleDelete()"> Delete </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-col>
         <v-col cols="6" class="d-flex justify-end">
           <v-btn
@@ -53,7 +67,9 @@ export default {
   name: 'SingleNote',
   props: ['note'],
 
-  data: () => ({}),
+  data: () => ({
+    deleteDialog: false,
+  }),
   computed: {
     completeButtonColor() {
       const note = this.note
@@ -61,7 +77,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['updateNote', 'toggleEditNoteDialog', 'startEditing']),
+    ...mapActions([
+      'updateNote',
+      'toggleEditNoteDialog',
+      'startEditing',
+      'deleteNote',
+    ]),
     formatDateFromUtc(utcIsoDate) {
       return formatDate(utcIsoDate)
     },
@@ -75,6 +96,10 @@ export default {
     },
     editNote() {
       this.startEditing({ noteToEdit: this.note })
+    },
+    handleDelete() {
+      this.deleteNote({ noteToDelete: this.note })
+      this.deleteDialog = false
     },
   },
 }

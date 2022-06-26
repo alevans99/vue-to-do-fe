@@ -32,4 +32,11 @@ export default {
     state.noteToEdit = { ...payload.noteToEdit }
     state.editNoteDialog = true
   },
+  deleteNote(state, payload) {
+    const deletedId = payload.noteToDelete.noteId
+    const indexToDelete = state.notes.findIndex((note) => {
+      return note.noteId === deletedId
+    })
+    state.notes.splice(indexToDelete, 1)
+  },
 }

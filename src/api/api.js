@@ -24,14 +24,22 @@ export const addNewNote = async (newNote) => {
   }
 }
 
-export const updateNote = async (updatedNote) => {
+export const updateNote = async (noteToUpdate) => {
   try {
     const {
       data: { note },
-    } = await dbApi.patch(`/notes/${updatedNote.list_id}`, {
-      note: updatedNote,
+    } = await dbApi.patch(`/notes/${noteToUpdate.list_id}`, {
+      note: noteToUpdate,
     })
     return note
+  } catch (error) {
+    console.log(error)
+  }
+}
+export const deleteNote = async (noteToDelete) => {
+  try {
+    await dbApi.delete(`/notes/${noteToDelete.listId}/${noteToDelete.noteId}`)
+    return { message: 'Note Deleted' }
   } catch (error) {
     console.log(error)
   }
