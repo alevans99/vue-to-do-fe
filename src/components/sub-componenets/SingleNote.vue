@@ -25,7 +25,7 @@
       </v-row>
       <v-row>
         <v-col cols="6">
-          <v-btn class="ma-4" depressed>Edit</v-btn>
+          <v-btn class="ma-4" depressed @click="editNote()">Edit</v-btn>
           <v-btn class="ma-4" depressed>Delete</v-btn>
         </v-col>
         <v-col cols="6" class="d-flex justify-end">
@@ -52,6 +52,7 @@ import { mapActions } from 'vuex'
 export default {
   name: 'SingleNote',
   props: ['note'],
+
   data: () => ({}),
   computed: {
     completeButtonColor() {
@@ -60,7 +61,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['updateNote']),
+    ...mapActions(['updateNote', 'toggleEditNoteDialog', 'startEditing']),
     formatDateFromUtc(utcIsoDate) {
       return formatDate(utcIsoDate)
     },
@@ -71,6 +72,9 @@ export default {
       const noteToUpdate = { ...this.note }
       noteToUpdate.complete = !noteToUpdate.complete
       this.updateNote({ noteToUpdate })
+    },
+    editNote() {
+      this.startEditing({ noteToEdit: this.note })
     },
   },
 }

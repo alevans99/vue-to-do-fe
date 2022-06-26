@@ -6,6 +6,6 @@ export const formatDate = (dateTimeIso) => {
 }
 
 export const formatPriorityToString = (formatInt) => {
-  const priorityStrings = { 1: 'High', 2: 'Medium', 3: 'Low' }
+  const priorityStrings = { 1: 'Low', 2: 'Medium', 3: 'High' }
   return priorityStrings[formatInt] || 'Medium'
 }

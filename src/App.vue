@@ -18,6 +18,7 @@
         <v-icon>mdi-plus</v-icon>
       </v-btn>
       <addNoteDialog />
+      <editNoteDialog />
     </v-main>
   </v-app>
 </template>
@@ -27,12 +28,15 @@ import NoteListPage from './components/pages/NoteListPage'
 import { mapState, mapActions } from 'vuex'
 import dbIdCreation from './utils/dbIdCreation'
 import addNoteDialog from './components/sub-componenets/AddNoteDialog.vue'
+import editNoteDialog from './components/sub-componenets/EditNoteDialog.vue'
+
 export default {
   name: 'App',
 
   components: {
     NoteListPage,
     addNoteDialog,
+    editNoteDialog,
   },
 
   data: () => ({}),

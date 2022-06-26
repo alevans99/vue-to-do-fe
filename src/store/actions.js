@@ -25,6 +25,9 @@ export default {
   toggleAddNoteDialog(context) {
     context.commit('toggleAddNoteDialog')
   },
+  toggleEditNoteDialog(context) {
+    context.commit('toggleEditNoteDialog')
+  },
   async addNewNote(context, payload) {
     try {
       const addedNote = await addNewNote(payload.newNote)
@@ -47,5 +50,12 @@ export default {
     } catch (error) {
       console.log(error)
     }
+  },
+
+  updateEditNoteField(context, payload) {
+    context.commit('updateEditNoteField', payload)
+  },
+  startEditing(context, payload) {
+    context.commit('startEditing', payload)
   },
 }

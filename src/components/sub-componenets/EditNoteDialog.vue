@@ -1,13 +1,14 @@
 <template>
   <v-row justify="center">
-    <v-dialog persistent max-width="800px" :value="addNoteDialog">
+    <v-dialog persistent max-width="800px" :value="editNoteDialog">
       <v-card>
         <v-container class="pa-12">
           <!-- Note Title -->
           <v-row justify="center">
             <v-col cols="12" md="10">
               <v-text-field
-                v-model="newNoteTitle"
+                :value="noteToEdit.noteTitle"
+                @input="updateNoteField('noteTitle', $event)"
                 label="New Note Title"
                 required
               ></v-text-field>
@@ -17,7 +18,8 @@
           <v-row justify="center">
             <v-col cols="12" md="10">
               <v-textarea
-                v-model="newNoteText"
+                :value="noteToEdit.noteText"
+                @input="updateNoteField('noteText', $event)"
                 label="New Note Text"
               ></v-textarea>
             </v-col>
@@ -108,7 +110,11 @@
 
           <v-row justify="center" v-if="priorityActive" class="d-flex">
             <v-col cols="10">
-              <v-radio-group v-model="prioritySelected" row>
+              <v-radio-group
+                :value="noteToEdit.priority.toString()"
+                @change="updateNoteField('priority', Number($event))"
+                row
+              >
                 <v-radio label="Low" value="1"></v-radio>
                 <v-spacer></v-spacer>
                 <v-radio label="Medium" value="2"></v-radio>
@@ -127,7 +133,7 @@
                   dark
                   large
                   color="red"
-                  @click="discardNewNote"
+                  @click="toggleEditNoteDialog"
                 >
                   <v-icon dark> mdi-delete </v-icon>
                 </v-btn>
@@ -138,7 +144,7 @@
                   dark
                   large
                   color="primary"
-                  @click="saveNewNote"
+                  @click="saveNote"
                 >
                   <v-icon dark> mdi-content-save </v-icon>
                 </v-btn>
@@ -156,23 +162,20 @@ import { mapState, mapActions } from 'vuex'
 import { DateTime } from 'luxon'
 
 export default {
-  name: 'AddNoteDialog',
+  name: 'EditNoteDialog',
   props: [],
   data: () => ({
-    newNoteTitle: '',
-    newNoteText: '',
+    datePicker: null,
+    timePicker: null,
     deadlineActive: false,
-    datePicker: DateTime.now().plus({ days: 1 }).toISODate(),
     datePickerMenu: false,
-    timePicker: '12:00',
     timePickerMenu: false,
     priorityActive: false,
-    prioritySelected: '2',
   }),
   computed: {
     ...mapState({
-      dbId: (state) => state.dbId,
-      addNoteDialog: (state) => state.addNoteDialog,
+      editNoteDialog: (state) => state.editNoteDialog,
+      noteToEdit: (state) => state.noteToEdit,
     }),
     deadlineText() {
       const dateString = DateTime.fromISO(this.datePicker)
@@ -182,38 +185,52 @@ export default {
       return `This needs to be done by ${dateString} at ${this.timePicker}.`
     },
   },
-  methods: {
-    ...mapActions(['toggleAddNoteDialog', 'addNewNote']),
-    discardNewNote() {
-      this.toggleAddNoteDialog()
-      this.newNoteTitle = ''
-      this.newNoteText = ''
-      this.deadlineActive = false
-      this.datePicker = DateTime.now().plus({ days: 1 }).toISODate()
-      this.datePickerMenu = false
-      this.timePicker = '12:00'
-      this.timePickerMenu = false
-      this.priorityActive = false
-      this.prioritySelected = '2'
+  watch: {
+    //Every time the dialog opens, set the initial values.
+    editNoteDialog(newValue) {
+      if (newValue) {
+        this.deadlineActive = this.noteToEdit.deadline !== null
+        this.datePicker =
+          this.parseDate(this.noteToEdit.deadline) ||
+          DateTime.now().plus({ days: 1 }).toISODate()
+        this.timePicker = this.parseTime(this.noteToEdit.deadline) || '12:00'
+        this.priorityActive = this.noteToEdit.priority !== 2
+      }
     },
-    saveNewNote() {
-      const newNote = {
-        listId: this.dbId,
-        noteTitle: this.newNoteTitle,
-        noteText: this.newNoteText,
-        timestamp: DateTime.now().toUTC().toISO(),
-        priority: Number(this.prioritySelected),
-        complete: false,
+
+    //Construct and update the new deadline on change
+    datePicker(newValue) {
+      const isoString = `${newValue}T${this.timePicker}`
+      const utcIso = DateTime.fromISO(isoString).toUTC().toISO()
+      this.updateNoteField('deadline', utcIso)
+    },
+    timePicker(newValue) {
+      const isoString = `${this.datePicker}T${newValue}`
+      const utcIso = DateTime.fromISO(isoString).toUTC().toISO()
+      this.updateNoteField('deadline', utcIso)
+    },
+  },
+  methods: {
+    ...mapActions([
+      'toggleEditNoteDialog',
+      'updateNote',
+      'updateEditNoteField',
+    ]),
+    saveNote() {
+      this.updateNote({ noteToUpdate: { ...this.noteToEdit } })
+      this.toggleEditNoteDialog()
+    },
+    updateNoteField(key, value) {
+      this.updateEditNoteField({ key, value })
+    },
+    parseDate(isoDateTime) {
+      return DateTime.fromISO(isoDateTime).toISODate()
+    },
+    parseTime(isoDateTime) {
+      if (isoDateTime) {
+        return DateTime.fromISO(isoDateTime).toFormat('HH:mm')
       }
-      if (this.deadlineActive) {
-        const isoString = `${this.datePicker}T${this.timePicker}`
-        const utcIso = DateTime.fromISO(isoString).toUTC().toISO()
-        newNote.deadline = utcIso
-      } else {
-        newNote.deadline = null
-      }
-      console.log(newNote)
-      this.addNewNote({ newNote })
+      return null
     },
   },
 }

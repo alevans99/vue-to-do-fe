@@ -2,6 +2,8 @@ export default {
   dbId: '',
   notes: [],
   addNoteDialog: false,
+  editNoteDialog: false,
+  noteToEdit: {},
   testNotes: [
     {
       noteId: 1,
