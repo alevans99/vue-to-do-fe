@@ -39,4 +39,10 @@ export default {
     })
     state.notes.splice(indexToDelete, 1)
   },
+  sortNotes(state, payload) {
+    state.sortChoice = payload.sortChoice
+  },
+  hideCompleted(state, payload) {
+    state.areCompletedNotesHidded = payload.areCompletedNotesHidded
+  },
 }

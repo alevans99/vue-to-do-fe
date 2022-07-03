@@ -71,4 +71,17 @@ export default {
       console.log(error)
     }
   },
+
+  /**
+   * Sorting Notes
+   */
+  sortNotes(context, payload) {
+    context.commit('sortNotes', payload)
+  },
+  /**
+   * Hide Completed
+   */
+  hideCompleted(context, payload) {
+    context.commit('hideCompleted', payload)
+  },
 }

@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <NoteListPage />
-      <v-btn
+      <!-- <v-btn
         color="blue"
         fixed
         bottom
@@ -16,7 +16,8 @@
         @click="toggleAddNoteDialog"
       >
         <v-icon>mdi-plus</v-icon>
-      </v-btn>
+      </v-btn> -->
+      <listControls />
       <addNoteDialog />
       <editNoteDialog />
     </v-main>
@@ -29,7 +30,7 @@ import { mapState, mapActions } from 'vuex'
 import dbIdCreation from './utils/dbIdCreation'
 import addNoteDialog from './components/sub-componenets/AddNoteDialog.vue'
 import editNoteDialog from './components/sub-componenets/EditNoteDialog.vue'
-
+import listControls from './components/sub-componenets/ListControls.vue'
 export default {
   name: 'App',
 
@@ -37,6 +38,7 @@ export default {
     NoteListPage,
     addNoteDialog,
     editNoteDialog,
+    listControls,
   },
 
   data: () => ({}),

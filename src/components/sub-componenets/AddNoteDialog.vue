@@ -186,6 +186,9 @@ export default {
     ...mapActions(['toggleAddNoteDialog', 'addNewNote']),
     discardNewNote() {
       this.toggleAddNoteDialog()
+      this.deleteUnsavedNote()
+    },
+    deleteUnsavedNote() {
       this.newNoteTitle = ''
       this.newNoteText = ''
       this.deadlineActive = false
@@ -212,8 +215,8 @@ export default {
       } else {
         newNote.deadline = null
       }
-      console.log(newNote)
       this.addNewNote({ newNote })
+      this.deleteUnsavedNote()
     },
   },
 }

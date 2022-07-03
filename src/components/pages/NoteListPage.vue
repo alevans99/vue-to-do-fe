@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-row v-for="note in notes" :key="note.noteId">
-      <v-col cols="12">
+    <v-row v-for="note in notesToDisplay" :key="note.noteId" justify="center">
+      <v-col cols="12" md="10" lg="8">
         <SingleNote :note="note" />
       </v-col>
     </v-row>
@@ -28,7 +28,7 @@ export default {
       dbId: (state) => state.dbId,
       notes: (state) => state.notes,
     }),
-    ...mapGetters(['incompleteNotes', 'completeNotes']),
+    ...mapGetters(['notesToDisplay']),
   },
 }
 </script>

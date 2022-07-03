@@ -4,6 +4,8 @@ export default {
   addNoteDialog: false,
   editNoteDialog: false,
   noteToEdit: {},
+  sortChoice: 'created',
+  areCompletedNotesHidded: false,
   testNotes: [
     {
       noteId: 1,
