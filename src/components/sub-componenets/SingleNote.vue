@@ -14,23 +14,74 @@
         </v-col>
         <v-col cols="3">
           <div class="d-flex flex-column align-end">
-            <v-icon x-large :color="alertColor" class="ma-2"
-              >mdi-alert-octagon</v-icon
-            >
-            <h4 class="`xa-4 text-h6 text-right`">
-              {{ formatDateFromUtc(note.deadline) || '' }}
-            </h4>
+            <v-tooltip left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  x-large
+                  :color="alertColor"
+                  class="ma-2"
+                  v-bind="attrs"
+                  v-on="on"
+                  >mdi-alert-octagon</v-icon
+                >
+              </template>
+              <span>
+                {{ `${formatPriorityToString(note.priority)} Priority` }}</span
+              >
+            </v-tooltip>
+
+            <v-tooltip left>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  v-if="note.deadline"
+                  x-large
+                  :color="deadlineColor"
+                  class="ma-2"
+                  v-bind="attrs"
+                  v-on="on"
+                  >mdi-clipboard-text-clock</v-icon
+                >
+              </template>
+              <span> {{ formatDateFromUtc(note.deadline) || '' }}</span>
+            </v-tooltip>
           </div>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="6">
-          <v-btn class="ma-4" depressed @click="editNote()">Edit</v-btn>
-          <v-dialog v-model="deleteDialog" persistent max-width="290">
+          <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark v-bind="attrs" v-on="on">
-                Delete
+              <v-btn
+                class="ma-4"
+                depressed
+                v-bind="attrs"
+                fab
+                v-on="on"
+                @click="editNote()"
+              >
+                <v-icon dark> mdi-pencil </v-icon>
               </v-btn>
+            </template>
+            <span>Edit This Note</span>
+          </v-tooltip>
+          <v-dialog v-model="deleteDialog" persistent max-width="290">
+            <template v-slot:activator="{ on: dialogOn, attrs: dialogAttrs }">
+              <v-tooltip top>
+                <template
+                  v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }"
+                >
+                  <v-btn
+                    color="primary"
+                    dark
+                    v-bind="{ ...dialogAttrs, ...tooltipAttrs }"
+                    v-on="{ ...dialogOn, ...tooltipOn }"
+                    fab
+                  >
+                    <v-icon dark> mdi-close </v-icon>
+                  </v-btn>
+                </template>
+                <span>Delete This Note</span>
+              </v-tooltip>
             </template>
             <v-card>
               <v-card-title class="text-h5"> Delete Note? </v-card-title>
@@ -42,17 +93,25 @@
             </v-card>
           </v-dialog>
         </v-col>
-        <v-col cols="6" class="d-flex justify-end">
-          <v-btn
-            class="mx-2"
-            fab
-            dark
-            small
-            :color="completeButtonColor"
-            @click="toggleNoteCompletion"
-          >
-            <v-icon dark> mdi-check </v-icon>
-          </v-btn>
+        <v-col cols="6" class="d-flex justify-end align-center">
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="mx-2"
+                fab
+                dark
+                :color="completeButtonColor"
+                @click="toggleNoteCompletion"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon dark> mdi-check </v-icon>
+              </v-btn>
+            </template>
+            <span>{{
+              note.complete ? 'Mark Incomplete' : 'Mark Complete'
+            }}</span>
+          </v-tooltip>
         </v-col>
       </v-row>
     </v-container>
@@ -95,7 +154,7 @@ export default {
       const daysUntilDeadline = DateTime.fromISO(deadline).diffNow([
         'days',
       ]).days
-      console.log(daysUntilDeadline.days)
+      console.log(daysUntilDeadline)
       switch (true) {
         case daysUntilDeadline < 1:
           return 'red darken-4'
