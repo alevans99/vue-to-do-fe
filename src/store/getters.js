@@ -33,6 +33,12 @@ export default {
         break
       case 'deadline':
         currentNotes.sort((a, b) => {
+          if (a.deadline === null) {
+            return 1
+          }
+          if (b.deadline === null) {
+            return -1
+          }
           const aDeadline = DateTime.fromISO(a.deadline)
           const bDeadline = DateTime.fromISO(b.deadline)
           return aDeadline < bDeadline ? -1 : aDeadline > bDeadline ? 1 : 0

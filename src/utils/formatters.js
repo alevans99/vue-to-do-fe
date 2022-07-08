@@ -1,8 +1,10 @@
 import { DateTime } from 'luxon'
 export const formatDate = (dateTimeIso) => {
-  return DateTime.fromISO(dateTimeIso)
+  const formattedDate = DateTime.fromISO(dateTimeIso)
     .setLocale('gb')
     .toLocaleString(DateTime.DATETIME_SHORT)
+
+  return formattedDate !== 'Invalid DateTime' ? formattedDate : null
 }
 
 export const formatPriorityToString = (formatInt) => {

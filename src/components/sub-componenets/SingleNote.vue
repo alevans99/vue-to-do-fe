@@ -14,10 +14,10 @@
         </v-col>
         <v-col cols="3">
           <div class="d-flex flex-column align-end">
-            <h4 class="ma-4 text-h5 text-right">
-              {{ formatPriorityToString(note.priority) || '' }}
-            </h4>
-            <h4 class="ma-4 text-h6 text-right">
+            <v-icon x-large :color="alertColor" class="ma-2"
+              >mdi-alert-octagon</v-icon
+            >
+            <h4 class="`xa-4 text-h6 text-right`">
               {{ formatDateFromUtc(note.deadline) || '' }}
             </h4>
           </div>
@@ -62,6 +62,7 @@
 <script>
 import { formatDate, formatPriorityToString } from '../../utils/formatters'
 import { mapActions } from 'vuex'
+import { DateTime } from 'luxon'
 
 export default {
   name: 'SingleNote',
@@ -75,6 +76,35 @@ export default {
       const note = this.note
       return note.complete ? 'pink' : 'grey'
     },
+    alertColor() {
+      const note = this.note
+      switch (note.priority) {
+        case 3:
+          return 'red darken-4'
+        case 1:
+          return 'green darken-3'
+        default:
+          return 'yellow darken-1'
+      }
+    },
+    deadlineColor() {
+      const deadline = this.note.deadline
+      if (!deadline) {
+        return ''
+      }
+      const daysUntilDeadline = DateTime.fromISO(deadline).diffNow([
+        'days',
+      ]).days
+      console.log(daysUntilDeadline.days)
+      switch (true) {
+        case daysUntilDeadline < 1:
+          return 'red darken-4'
+        case daysUntilDeadline < 3:
+          return 'yellow darken-1'
+        default:
+          return 'green darken-3'
+      }
+    },
   },
   methods: {
     ...mapActions([
@@ -84,7 +114,7 @@ export default {
       'deleteNote',
     ]),
     formatDateFromUtc(utcIsoDate) {
-      return formatDate(utcIsoDate)
+      return formatDate(utcIsoDate) || ''
     },
     formatPriorityToString(priorityInt) {
       return formatPriorityToString(priorityInt)
