@@ -1,22 +1,10 @@
 <template>
-  <v-app>
+  <v-app
+    id="main"
+    :style="{ background: $vuetify.theme.themes[theme].background }"
+  >
     <v-main>
       <NoteListPage />
-      <!-- <v-btn
-        color="blue"
-        fixed
-        bottom
-        right
-        dark
-        fab
-        x-large
-        elevation="2"
-        class="mr-8 mb-8"
-        :disabled="addNoteDialog"
-        @click="toggleAddNoteDialog"
-      >
-        <v-icon>mdi-plus</v-icon>
-      </v-btn> -->
       <listControls />
       <addNoteDialog />
       <editNoteDialog />
@@ -46,6 +34,9 @@ export default {
     ...mapState({
       dbId: (state) => state.dbId,
       addNoteDialog: (state) => state.addNoteDialog,
+      theme() {
+        return this.$vuetify.theme.dark ? 'dark' : 'light'
+      },
     }),
   },
   methods: {
@@ -71,3 +62,8 @@ export default {
   },
 }
 </script>
+<style>
+#app {
+  background-color: var(--v-background-base);
+}
+</style>
