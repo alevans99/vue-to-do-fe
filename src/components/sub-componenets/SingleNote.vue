@@ -1,5 +1,5 @@
 <template>
-  <v-card class="note-card" elevation="12" color="#F0F6F6">
+  <v-card class="note-card" color="#F0F6F6">
     <v-container>
       <v-row class="">
         <v-col cols="9" class="pb-0">
@@ -197,5 +197,12 @@ export default {
 .note-card {
   border-radius: 20px !important;
   border: 5px solid #084b83 !important;
+  box-shadow: 0px 10px 14px 2px #084b83 !important;
+  /* box-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
+    0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa !important; */
+  /* border: 0.2rem solid #fff !important;
+  border-radius: 2rem !important;
+  box-shadow: 0 0 0.2rem #fff, 0 0 0.2rem #fff, 0 0 2rem #ff66b3,
+    0 0 0.8rem #ff66b3, 0 0 2.8rem #ff66b3, inset 0 0 1.3rem #ff66b3 !important; */
 }
 </style>

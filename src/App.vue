@@ -1,7 +1,13 @@
 <template>
   <v-app
     id="main"
-    :style="{ background: $vuetify.theme.themes[theme].background }"
+    :style="{
+      background: $vuetify.theme.themes[theme].background,
+      backgroundImage: `url(${backgroundImage})`,
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      backgroundAttachment: 'fixed',
+    }"
   >
     <v-main>
       <NoteListPage />
@@ -19,6 +25,7 @@ import dbIdCreation from './utils/dbIdCreation'
 import addNoteDialog from './components/sub-componenets/AddNoteDialog.vue'
 import editNoteDialog from './components/sub-componenets/EditNoteDialog.vue'
 import listControls from './components/sub-componenets/ListControls.vue'
+import backgroundUrl from './assets/back.jpg'
 export default {
   name: 'App',
 
@@ -29,7 +36,9 @@ export default {
     listControls,
   },
 
-  data: () => ({}),
+  data: () => ({
+    backgroundImage: backgroundUrl,
+  }),
   computed: {
     ...mapState({
       dbId: (state) => state.dbId,

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuetify from 'vuetify/lib/framework'
 import colors from 'vuetify/lib/util/colors'
 Vue.use(Vuetify)
-
 export default new Vuetify({
   theme: {
     themes: {
@@ -11,7 +10,7 @@ export default new Vuetify({
         secondary: '#BBE6E4',
         accent: '#FF66B3',
         error: colors.red.accent3,
-        background: '#42BFDD',
+        background: '#fff',
       },
       dark: {
         primary: colors.blue.lighten3,
@@ -26,3 +25,4 @@ export default new Vuetify({
 //#BBE6E4
 //#F0F6F6
 //#FF66B3
+//#2E2C2F

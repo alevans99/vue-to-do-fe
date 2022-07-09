@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center ma-0">
     <v-dialog persistent max-width="800px" :value="editNoteDialog">
       <v-card>
         <v-container class="pa-12">
