@@ -1,6 +1,15 @@
 <template>
   <v-container>
-    <div class="d-flex flex-column fixed">
+    <div
+      class="
+        d-flex
+        flex-row flex-md-column
+        fixed
+        px-6
+        justify-space-around justify-md-center
+        align-center
+      "
+    >
       <v-speed-dial
         v-model="sortSpeedDial"
         direction="top"
@@ -16,7 +25,7 @@
                 fab
                 elevation="2"
                 x-large
-                class="mb-8"
+                class="mb-md-6 my-4"
                 v-bind="attrs"
                 v-on="on"
               >
@@ -84,7 +93,7 @@
             fab
             x-large
             elevation="2"
-            class="mb-8"
+            class="mb-md-6 my-4"
             @click="
               hideCompleted({
                 areCompletedNotesHidded: !areCompletedNotesHidded,
@@ -109,7 +118,7 @@
             fab
             x-large
             elevation="2"
-            class="mb-8"
+            class="mb-md-6 my-4"
             v-bind="attrs"
             v-on="on"
             @click="toggleAddNoteDialog"
@@ -166,7 +175,13 @@ export default {
 .fixed {
   position: fixed;
   text-align: center;
-  bottom: 20px;
-  right: 40px;
+  bottom: 0;
+  right: 0;
+}
+@media (min-width: 0px) and (max-width: 959px) {
+  .fixed {
+    background-color: rgba(0, 0, 0, 0.1);
+    left: 0;
+  }
 }
 </style>
