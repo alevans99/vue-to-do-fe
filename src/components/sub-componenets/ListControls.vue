@@ -20,7 +20,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 v-model="sortSpeedDial"
-                color="purple"
+                color="accent"
                 dark
                 fab
                 elevation="2"
@@ -42,7 +42,7 @@
               fab
               dark
               large
-              color="purple"
+              color="accent"
               v-bind="attrs"
               v-on="on"
               @click="sortNotes({ sortChoice: 'created' })"
@@ -58,7 +58,7 @@
               fab
               dark
               large
-              color="purple"
+              color="accent"
               v-bind="attrs"
               v-on="on"
               @click="sortNotes({ sortChoice: 'deadline' })"
@@ -74,7 +74,7 @@
               fab
               dark
               large
-              color="purple"
+              color="accent"
               v-bind="attrs"
               v-on="on"
               @click="sortNotes({ sortChoice: 'priority' })"
@@ -88,7 +88,7 @@
       <v-tooltip left>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            color="green"
+            color="secondary"
             dark
             fab
             x-large
@@ -113,7 +113,7 @@
       <v-tooltip left>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            color="blue"
+            color="primary"
             dark
             fab
             x-large

@@ -1,13 +1,14 @@
 <template>
-  <v-card class="note-card" color="#F0F6F6">
+  <v-card :class="`${noteBackground}`">
     <v-container>
       <v-row class="">
         <v-col cols="9" class="pb-0">
-          <div class="d-flex flex-column" style="height: 260px">
+          <div class="d-flex flex-column" style="">
+            <!-- Was 260px height -->
             <h4 class="ma-4 text-h4">
               {{ note.noteTitle || 'Untitled Note' }}
             </h4>
-            <p class="mx-4 body-1 overflow-auto">
+            <p class="mx-4 body-1 overflow-auto" style="white-space: pre-line">
               {{ note.noteText || 'This note is blank.' }}
             </p>
           </div>
@@ -53,7 +54,8 @@
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 class="ma-4"
-                depressed
+                color="primary"
+                dark
                 v-bind="attrs"
                 fab
                 v-on="on"
@@ -71,13 +73,13 @@
                   v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }"
                 >
                   <v-btn
-                    color="primary"
+                    color="highAlert"
                     dark
                     v-bind="{ ...dialogAttrs, ...tooltipAttrs }"
                     v-on="{ ...dialogOn, ...tooltipOn }"
                     fab
                   >
-                    <v-icon dark> mdi-close </v-icon>
+                    <v-icon dark> mdi-delete </v-icon>
                   </v-btn>
                 </template>
                 <span>Delete This Note</span>
@@ -97,15 +99,15 @@
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                class="mx-2"
+                :class="`mx-2 ${completeButtonTextColor}--text`"
                 fab
+                color="primary"
                 dark
-                :color="completeButtonColor"
                 @click="toggleNoteCompletion"
                 v-bind="attrs"
                 v-on="on"
               >
-                <v-icon dark> mdi-check </v-icon>
+                <v-icon dark> {{ completeButtonIcon }} </v-icon>
               </v-btn>
             </template>
             <span>{{
@@ -133,17 +135,29 @@ export default {
   computed: {
     completeButtonColor() {
       const note = this.note
-      return note.complete ? 'pink' : 'grey'
+      return note.complete ? 'green-color' : 'green-color'
+    },
+    completeButtonIcon() {
+      const note = this.note
+      return note.complete ? 'mdi-close' : 'mdi-check'
+    },
+    completeButtonTextColor() {
+      const note = this.note
+      return note.complete ? 'white' : 'white'
+    },
+    noteBackground() {
+      const note = this.note
+      return note.complete ? 'complete-note' : 'note-card'
     },
     alertColor() {
       const note = this.note
       switch (note.priority) {
         case 3:
-          return 'red darken-4'
+          return 'highAlert'
         case 1:
           return 'green darken-3'
         default:
-          return 'yellow darken-1'
+          return 'secondary'
       }
     },
     deadlineColor() {
@@ -157,11 +171,11 @@ export default {
       console.log(daysUntilDeadline)
       switch (true) {
         case daysUntilDeadline < 1:
-          return 'red darken-4'
+          return 'highAlert'
         case daysUntilDeadline < 3:
-          return 'yellow darken-1'
+          return 'mediumAlert'
         default:
-          return 'green darken-3'
+          return 'secondary'
       }
     },
   },
@@ -196,13 +210,26 @@ export default {
 <style scoped>
 .note-card {
   border-radius: 20px !important;
-  border: 5px solid #084b83 !important;
-  box-shadow: 0px 10px 14px 2px #084b83 !important;
+  border: 5px solid #2e294e !important;
+  box-shadow: 0px 10px 14px 2px #2e294e !important;
   /* box-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
     0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa !important; */
   /* border: 0.2rem solid #fff !important;
   border-radius: 2rem !important;
   box-shadow: 0 0 0.2rem #fff, 0 0 0.2rem #fff, 0 0 2rem #ff66b3,
     0 0 0.8rem #ff66b3, 0 0 2.8rem #ff66b3, inset 0 0 1.3rem #ff66b3 !important; */
+}
+
+.complete-note {
+  border-radius: 20px !important;
+  border: 5px solid #306b34 !important;
+  box-shadow: 0px 10px 14px 2px #306b34 !important;
+  background: repeating-linear-gradient(
+    45deg,
+    #ccddcd,
+    #ccddcd 20px,
+    #fff 20px,
+    #fff 30px
+  ) !important;
 }
 </style>

@@ -75,4 +75,7 @@ export default {
 #app {
   background-color: var(--v-background-base);
 }
+.green-color {
+  background-color: #306b34 !important;
+}
 </style>
