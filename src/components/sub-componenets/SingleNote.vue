@@ -90,7 +90,9 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn text @click="deleteDialog = false"> Cancel </v-btn>
-                <v-btn text @click="handleDelete()"> Delete </v-btn>
+                <v-btn text @click="handleDelete()" color="highAlert">
+                  Delete
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>

@@ -78,4 +78,8 @@ export default {
 .green-color {
   background-color: #306b34 !important;
 }
+.v-dialog {
+  border-radius: 20px !important;
+  border: 5px solid #2e294e !important;
+}
 </style>

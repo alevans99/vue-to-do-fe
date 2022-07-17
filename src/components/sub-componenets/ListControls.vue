@@ -180,7 +180,9 @@ export default {
 }
 @media (min-width: 0px) and (max-width: 959px) {
   .fixed {
-    background-color: rgba(0, 0, 0, 0.1);
+    /* background-color: rgba(2, 0, 29, 0.4); */
+    background-color: #efb7009b;
+    border-top: 3px solid #2e294e;
     left: 0;
   }
 }

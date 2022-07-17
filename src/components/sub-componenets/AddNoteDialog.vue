@@ -5,20 +5,22 @@
         <v-container class="pa-12">
           <!-- Note Title -->
           <v-row justify="center">
-            <v-col cols="12" md="10">
+            <v-col cols="12" md="12">
               <v-text-field
                 v-model="newNoteTitle"
                 label="New Note Title"
                 required
+                outlined
               ></v-text-field>
             </v-col>
           </v-row>
           <!-- Note Text -->
           <v-row justify="center">
-            <v-col cols="12" md="10">
+            <v-col cols="12" md="12">
               <v-textarea
                 v-model="newNoteText"
                 label="New Note Text"
+                outlined
               ></v-textarea>
             </v-col>
           </v-row>
@@ -50,6 +52,7 @@
                     readonly
                     v-bind="attrs"
                     v-on="on"
+                    outlined
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -80,6 +83,7 @@
                     readonly
                     v-bind="attrs"
                     v-on="on"
+                    outlined
                   ></v-text-field>
                 </template>
                 <v-time-picker
@@ -126,10 +130,10 @@
                   fab
                   dark
                   large
-                  color="red"
+                  color="highAlert"
                   @click="discardNewNote"
                 >
-                  <v-icon dark> mdi-delete </v-icon>
+                  <v-icon dark> mdi-close </v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn
