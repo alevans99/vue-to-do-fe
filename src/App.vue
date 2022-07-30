@@ -82,4 +82,13 @@ export default {
   border-radius: 20px !important;
   border: 5px solid #2e294e !important;
 }
+.v-card {
+  border-radius: 0 !important;
+}
+#form-controls {
+  position: sticky;
+  z-index: 2;
+  bottom: 0;
+  background-color: #fff;
+}
 </style>

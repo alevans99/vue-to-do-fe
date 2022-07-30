@@ -1,165 +1,155 @@
 <template>
   <div>
-    <v-row justify="center ma-0">
-      <v-dialog persistent max-width="800px" :value="editNoteDialog">
-        <v-card class="dialog-style">
-          <v-container class="pa-12">
-            <!-- Note Title -->
-            <v-row justify="center">
-              <v-col cols="12">
-                <v-text-field
-                  :value="noteToEdit.noteTitle"
-                  @input="updateNoteField('noteTitle', $event)"
-                  label="New Note Title"
-                  required
-                  outlined
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <!-- Note Text -->
-            <v-row justify="center">
-              <v-col cols="12">
-                <v-textarea
-                  :value="noteToEdit.noteText"
-                  @input="updateNoteField('noteText', $event)"
-                  label="New Note Text"
-                  outlined
-                ></v-textarea>
-              </v-col>
-            </v-row>
-            <!-- Optional Deadline Setter -->
-            <v-row justify="start">
-              <v-col cols="12">
-                <v-switch
-                  v-model="deadlineActive"
-                  label="Set Deadline"
-                ></v-switch>
-              </v-col>
-            </v-row>
-            <v-row justify="center" v-if="deadlineActive">
-              <v-col cols="6" md="6">
-                <v-menu
-                  ref="dateRef"
-                  v-model="datePickerMenu"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="320px"
-                  min-width="320px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="datePicker"
-                      label="Set Date"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      outlined
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-if="datePickerMenu"
+    <v-dialog persistent max-width="800px" :value="editNoteDialog">
+      <v-card>
+        <v-container class="pa-12">
+          <!-- Note Title -->
+          <v-row justify="center">
+            <v-col cols="12">
+              <v-text-field
+                :value="noteToEdit.noteTitle"
+                @input="updateNoteField('noteTitle', $event)"
+                label="New Note Title"
+                required
+                outlined
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <!-- Note Text -->
+          <v-row justify="center">
+            <v-col cols="12">
+              <v-textarea
+                :value="noteToEdit.noteText"
+                @input="updateNoteField('noteText', $event)"
+                label="New Note Text"
+                outlined
+              ></v-textarea>
+            </v-col>
+          </v-row>
+          <!-- Optional Deadline Setter -->
+          <v-row justify="start">
+            <v-col cols="12">
+              <v-switch
+                v-model="deadlineActive"
+                label="Set Deadline"
+              ></v-switch>
+            </v-col>
+          </v-row>
+          <v-row justify="center" v-if="deadlineActive">
+            <v-col cols="6" md="6">
+              <v-menu
+                ref="dateRef"
+                v-model="datePickerMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                max-width="320px"
+                min-width="320px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
                     v-model="datePicker"
-                    full-width
-                    @input="datePickerMenu = false"
-                  >
-                  </v-date-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="6" md="6">
-                <v-menu
-                  ref="timePicker"
-                  v-model="timePickerMenu"
-                  :close-on-content-click="false"
-                  :return-value.sync="timePicker"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="290px"
+                    label="Set Date"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-if="datePickerMenu"
+                  v-model="datePicker"
+                  full-width
+                  @input="datePickerMenu = false"
                 >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="timePicker"
-                      label="Set Time"
-                      prepend-icon="mdi-clock-time-four-outline"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      outlined
-                    ></v-text-field>
-                  </template>
-                  <v-time-picker
-                    v-if="timePickerMenu"
+                </v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col cols="6" md="6">
+              <v-menu
+                ref="timePicker"
+                v-model="timePickerMenu"
+                :close-on-content-click="false"
+                :return-value.sync="timePicker"
+                transition="scale-transition"
+                offset-y
+                max-width="290px"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
                     v-model="timePicker"
-                    full-width
-                    @click:minute="$refs.timePicker.save(timePicker)"
-                    format="24hr"
-                  ></v-time-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="12"
-                ><h4>{{ deadlineText }}</h4>
-              </v-col>
-            </v-row>
+                    label="Set Time"
+                    prepend-icon="mdi-clock-time-four-outline"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                  ></v-text-field>
+                </template>
+                <v-time-picker
+                  v-if="timePickerMenu"
+                  v-model="timePicker"
+                  full-width
+                  @click:minute="$refs.timePicker.save(timePicker)"
+                  format="24hr"
+                ></v-time-picker>
+              </v-menu>
+            </v-col>
+            <v-col cols="12"
+              ><h4>{{ deadlineText }}</h4>
+            </v-col>
+          </v-row>
 
-            <!-- Optional Priorities -->
-            <v-row justify="start">
-              <v-col cols="12">
-                <v-switch
-                  v-model="priorityActive"
-                  label="Set Priority"
-                ></v-switch>
-              </v-col>
-            </v-row>
+          <!-- Optional Priorities -->
+          <v-row justify="start">
+            <v-col cols="12">
+              <v-switch
+                v-model="priorityActive"
+                label="Set Priority"
+              ></v-switch>
+            </v-col>
+          </v-row>
 
-            <v-row justify="center" v-if="priorityActive" class="d-flex">
-              <v-col cols="10">
-                <v-radio-group
-                  :value="noteToEdit.priority.toString()"
-                  @change="updateNoteField('priority', Number($event))"
-                  row
-                >
-                  <v-radio label="Low" value="1"></v-radio>
-                  <v-spacer></v-spacer>
-                  <v-radio label="Medium" value="2"></v-radio>
-                  <v-spacer></v-spacer>
-                  <v-radio label="High" value="3"></v-radio>
-                </v-radio-group>
-              </v-col>
-            </v-row>
-            <!-- Form Controls -->
-            <v-row justify="center">
-              <v-col cols="12" md="12">
-                <div class="d-flex">
-                  <v-btn
-                    class="mx-2"
-                    fab
-                    dark
-                    large
-                    color="highAlert"
-                    @click="toggleEditNoteDialog"
-                  >
-                    <v-icon dark> mdi-close </v-icon>
-                  </v-btn>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    class="mx-2"
-                    fab
-                    dark
-                    large
-                    color="primary"
-                    @click="saveNote"
-                  >
-                    <v-icon dark> mdi-content-save </v-icon>
-                  </v-btn>
-                </div>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
-      </v-dialog>
-    </v-row>
+          <v-row justify="center" v-if="priorityActive" class="d-flex">
+            <v-col cols="10">
+              <v-radio-group
+                :value="noteToEdit.priority.toString()"
+                @change="updateNoteField('priority', Number($event))"
+                row
+              >
+                <v-radio label="Low" value="1"></v-radio>
+                <v-spacer></v-spacer>
+                <v-radio label="Medium" value="2"></v-radio>
+                <v-spacer></v-spacer>
+                <v-radio label="High" value="3"></v-radio>
+              </v-radio-group>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card>
+      <!-- Form Controls -->
+      <v-card-actions id="form-controls">
+        <div class="d-flex flex-column flex-grow-1">
+          <v-divider></v-divider>
+          <div class="d-flex ma-0 pa-8 flex-grow-1 justify-space-between">
+            <v-btn
+              fab
+              dark
+              large
+              color="highAlert"
+              @click="toggleEditNoteDialog"
+            >
+              <v-icon dark> mdi-close </v-icon>
+            </v-btn>
+            <v-btn fab dark large color="primary" @click="saveNote">
+              <v-icon dark> mdi-content-save </v-icon>
+            </v-btn>
+          </div>
+        </div>
+      </v-card-actions>
+    </v-dialog>
   </div>
 </template>
 

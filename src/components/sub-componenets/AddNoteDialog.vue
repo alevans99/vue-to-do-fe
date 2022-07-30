@@ -121,36 +121,37 @@
               </v-radio-group>
             </v-col>
           </v-row>
-          <!-- Form Controls -->
-          <v-row justify="center">
-            <v-col cols="12" md="12">
-              <div class="d-flex">
-                <v-btn
-                  class="mx-2"
-                  fab
-                  dark
-                  large
-                  color="highAlert"
-                  @click="discardNewNote"
-                >
-                  <v-icon dark> mdi-close </v-icon>
-                </v-btn>
-                <v-spacer></v-spacer>
-                <v-btn
-                  class="mx-2"
-                  fab
-                  dark
-                  large
-                  color="primary"
-                  @click="saveNewNote"
-                >
-                  <v-icon dark> mdi-content-save </v-icon>
-                </v-btn>
-              </div>
-            </v-col>
-          </v-row>
         </v-container>
       </v-card>
+      <!-- Form Controls -->
+      <v-card-actions id="form-controls">
+        <div class="d-flex flex-column flex-grow-1">
+          <v-divider></v-divider>
+          <div class="d-flex ma-0 pa-8 flex-grow-1 justify-space-between">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              large
+              color="highAlert"
+              @click="discardNewNote"
+            >
+              <v-icon dark> mdi-close </v-icon>
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              large
+              color="primary"
+              @click="saveNewNote"
+            >
+              <v-icon dark> mdi-content-save </v-icon>
+            </v-btn>
+          </div>
+        </div>
+      </v-card-actions>
     </v-dialog>
   </v-row>
 </template>
