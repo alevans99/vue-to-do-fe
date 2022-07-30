@@ -26,12 +26,52 @@
               ></v-textarea>
             </v-col>
           </v-row>
+
+          <!-- Optional Priorities -->
+
+          <v-row justify="center" class="d-flex">
+            <v-col cols="12" class="d-flex justify-space-around">
+              <div class="d-flex justify-center flex-column">
+                <p class="text-center text-body-1">Low</p>
+                <v-btn
+                  fab
+                  dark
+                  :color="getPriorityColor(1)"
+                  @click="updateNoteField('priority', 1)"
+                >
+                  <v-icon dark> mdi-alert-octagon </v-icon>
+                </v-btn>
+              </div>
+              <div class="d-flex justify-center flex-column">
+                <p class="text-center text-body-2">Medium</p>
+                <v-btn
+                  fab
+                  dark
+                  :color="getPriorityColor(2)"
+                  @click="updateNoteField('priority', 2)"
+                >
+                  <v-icon dark> mdi-alert-octagon </v-icon>
+                </v-btn>
+              </div>
+              <div class="d-flex justify-center flex-column">
+                <p class="text-center text-body-2">High</p>
+                <v-btn
+                  fab
+                  dark
+                  :color="getPriorityColor(3)"
+                  @click="updateNoteField('priority', 3)"
+                >
+                  <v-icon dark> mdi-alert-octagon </v-icon>
+                </v-btn>
+              </div>
+            </v-col>
+          </v-row>
           <!-- Optional Deadline Setter -->
           <v-row justify="start">
             <v-col cols="12">
               <v-switch
                 v-model="deadlineActive"
-                label="Set Deadline"
+                label="Add Deadline"
               ></v-switch>
             </v-col>
           </v-row>
@@ -98,33 +138,7 @@
               </v-menu>
             </v-col>
             <v-col cols="12"
-              ><h4>{{ deadlineText }}</h4>
-            </v-col>
-          </v-row>
-
-          <!-- Optional Priorities -->
-          <v-row justify="start">
-            <v-col cols="12">
-              <v-switch
-                v-model="priorityActive"
-                label="Set Priority"
-              ></v-switch>
-            </v-col>
-          </v-row>
-
-          <v-row justify="center" v-if="priorityActive" class="d-flex">
-            <v-col cols="10">
-              <v-radio-group
-                :value="noteToEdit.priority.toString()"
-                @change="updateNoteField('priority', Number($event))"
-                row
-              >
-                <v-radio label="Low" value="1"></v-radio>
-                <v-spacer></v-spacer>
-                <v-radio label="Medium" value="2"></v-radio>
-                <v-spacer></v-spacer>
-                <v-radio label="High" value="3"></v-radio>
-              </v-radio-group>
+              ><h5 class="text-h5 text-center">{{ deadlineText }}</h5>
             </v-col>
           </v-row>
         </v-container>
@@ -174,6 +188,9 @@ export default {
       noteToEdit: (state) => state.noteToEdit,
     }),
     deadlineText() {
+      if (this.timePicker === null || this.datePicker === null) {
+        return ''
+      }
       const dateString = DateTime.fromISO(this.datePicker)
         .setLocale('gb')
         .toLocaleString(DateTime.DATE_MED)
@@ -227,6 +244,14 @@ export default {
         return DateTime.fromISO(isoDateTime).toFormat('HH:mm')
       }
       return null
+    },
+    getPriorityColor(priority) {
+      const colors = {
+        1: 'secondary',
+        2: 'mediumAlert',
+        3: 'highAlert',
+      }
+      return this.noteToEdit.priority === priority ? colors[priority] : 'grey'
     },
   },
 }

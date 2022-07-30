@@ -1,10 +1,6 @@
 <template>
   <v-container>
-    <v-row
-      justify="center full-length"
-      align="center"
-      v-if="notesToDisplay.length === 0"
-    >
+    <v-row justify="center" align="center" v-if="notesToDisplay.length === 0">
       <v-col cols="12" md="10" lg="8">
         <h3 class="text-h3 text-center white--text">
           Click
@@ -16,8 +12,6 @@
               large
               elevation="2"
               class="mb-md-6 my-4"
-              v-bind="attrs"
-              v-on="on"
               @click="toggleAddNoteDialog"
             >
               <v-icon>mdi-plus</v-icon>

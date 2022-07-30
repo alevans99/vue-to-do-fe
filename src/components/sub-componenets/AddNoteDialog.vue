@@ -24,6 +24,44 @@
               ></v-textarea>
             </v-col>
           </v-row>
+          <!-- Optional Priorities -->
+          <v-row justify="center" class="d-flex">
+            <v-col cols="12" class="d-flex justify-space-around">
+              <div class="d-flex justify-center flex-column">
+                <p class="text-center text-body-1">Low</p>
+                <v-btn
+                  fab
+                  dark
+                  :color="getPriorityColor('1')"
+                  @click="prioritySelected = '1'"
+                >
+                  <v-icon dark> mdi-alert-octagon </v-icon>
+                </v-btn>
+              </div>
+              <div class="d-flex justify-center flex-column">
+                <p class="text-center text-body-2">Medium</p>
+                <v-btn
+                  fab
+                  dark
+                  :color="getPriorityColor('2')"
+                  @click="prioritySelected = '2'"
+                >
+                  <v-icon dark> mdi-alert-octagon </v-icon>
+                </v-btn>
+              </div>
+              <div class="d-flex justify-center flex-column">
+                <p class="text-center text-body-2">High</p>
+                <v-btn
+                  fab
+                  dark
+                  :color="getPriorityColor('3')"
+                  @click="prioritySelected = '3'"
+                >
+                  <v-icon dark> mdi-alert-octagon </v-icon>
+                </v-btn>
+              </div>
+            </v-col>
+          </v-row>
           <!-- Optional Deadline Setter -->
           <v-row justify="start">
             <v-col cols="12">
@@ -97,28 +135,6 @@
             </v-col>
             <v-col cols="12"
               ><h4>{{ deadlineText }}</h4>
-            </v-col>
-          </v-row>
-
-          <!-- Optional Priorities -->
-          <v-row justify="start">
-            <v-col cols="12">
-              <v-switch
-                v-model="priorityActive"
-                label="Set Priority"
-              ></v-switch>
-            </v-col>
-          </v-row>
-
-          <v-row justify="center" v-if="priorityActive" class="d-flex">
-            <v-col cols="10">
-              <v-radio-group v-model="prioritySelected" row>
-                <v-radio label="Low" value="1"></v-radio>
-                <v-spacer></v-spacer>
-                <v-radio label="Medium" value="2"></v-radio>
-                <v-spacer></v-spacer>
-                <v-radio label="High" value="3"></v-radio>
-              </v-radio-group>
             </v-col>
           </v-row>
         </v-container>
@@ -222,6 +238,14 @@ export default {
       }
       this.addNewNote({ newNote })
       this.deleteUnsavedNote()
+    },
+    getPriorityColor(priority) {
+      const colors = {
+        1: 'secondary',
+        2: 'mediumAlert',
+        3: 'highAlert',
+      }
+      return this.prioritySelected === priority ? colors[priority] : 'grey'
     },
   },
 }
