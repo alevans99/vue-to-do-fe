@@ -2,7 +2,7 @@
   <v-row justify="center" class="ma-0">
     <v-dialog persistent max-width="800px" :value="addNoteDialog">
       <v-card>
-        <v-container class="pa-12">
+        <v-form class="pa-10" ref="form">
           <!-- Note Title -->
           <v-row justify="center">
             <v-col cols="12" md="12">
@@ -11,6 +11,7 @@
                 label="New Note Title"
                 required
                 outlined
+                :rules="createValidation"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -21,6 +22,7 @@
                 v-model="newNoteText"
                 label="New Note Text"
                 outlined
+                :rules="createValidation"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -134,10 +136,10 @@
               </v-menu>
             </v-col>
             <v-col cols="12"
-              ><h4>{{ deadlineText }}</h4>
+              ><h5 class="text-h5 text-center">{{ deadlineText }}</h5>
             </v-col>
           </v-row>
-        </v-container>
+        </v-form>
       </v-card>
       <!-- Form Controls -->
       <v-card-actions id="form-controls">
@@ -158,10 +160,10 @@
             <v-btn
               class="mx-2"
               fab
-              dark
               large
               color="primary"
               @click="saveNewNote"
+              :disabled="saveDisabled"
             >
               <v-icon dark> mdi-content-save </v-icon>
             </v-btn>
@@ -189,6 +191,11 @@ export default {
     timePickerMenu: false,
     priorityActive: false,
     prioritySelected: '2',
+    createValidation: [
+      (value) => {
+        return (value !== null && value !== '') || 'Please enter information'
+      },
+    ],
   }),
   computed: {
     ...mapState({
@@ -201,6 +208,9 @@ export default {
         .toLocaleString(DateTime.DATE_MED)
 
       return `This needs to be done by ${dateString} at ${this.timePicker}.`
+    },
+    saveDisabled() {
+      return this.newNoteTitle === '' || this.newNoteText === ''
     },
   },
   methods: {

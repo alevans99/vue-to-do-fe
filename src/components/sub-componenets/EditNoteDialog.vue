@@ -2,7 +2,7 @@
   <div>
     <v-dialog persistent max-width="800px" :value="editNoteDialog">
       <v-card>
-        <v-container class="pa-12">
+        <v-form class="pa-10" ref="form">
           <!-- Note Title -->
           <v-row justify="center">
             <v-col cols="12">
@@ -12,6 +12,7 @@
                 label="New Note Title"
                 required
                 outlined
+                :rules="editValidation"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -23,6 +24,7 @@
                 @input="updateNoteField('noteText', $event)"
                 label="New Note Text"
                 outlined
+                :rules="editValidation"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -141,7 +143,7 @@
               ><h5 class="text-h5 text-center">{{ deadlineText }}</h5>
             </v-col>
           </v-row>
-        </v-container>
+        </v-form>
       </v-card>
       <!-- Form Controls -->
       <v-card-actions id="form-controls">
@@ -157,7 +159,13 @@
             >
               <v-icon dark> mdi-close </v-icon>
             </v-btn>
-            <v-btn fab dark large color="primary" @click="saveNote">
+            <v-btn
+              fab
+              large
+              color="primary"
+              @click="saveNote"
+              :disabled="saveDisabled"
+            >
               <v-icon dark> mdi-content-save </v-icon>
             </v-btn>
           </div>
@@ -181,6 +189,11 @@ export default {
     datePickerMenu: false,
     timePickerMenu: false,
     priorityActive: false,
+    editValidation: [
+      (value) => {
+        return (value !== null && value !== '') || 'Please enter information'
+      },
+    ],
   }),
   computed: {
     ...mapState({
@@ -196,6 +209,9 @@ export default {
         .toLocaleString(DateTime.DATE_MED)
 
       return `This needs to be done by ${dateString} at ${this.timePicker}.`
+    },
+    saveDisabled() {
+      return this.noteToEdit.noteTitle === '' || this.noteToEdit.noteText === ''
     },
   },
   watch: {
