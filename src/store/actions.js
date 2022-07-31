@@ -5,16 +5,16 @@ export default {
     context.commit('updateDbId', payload)
   },
 
-  async getAllNotes(context, payload) {
+  async getAllNotes({ commit, dispatch, state }, payload) {
     try {
-      const dbId = context.state.dbId
+      const dbId = state.dbId
       if (dbId) {
         const notes = await getAllNotes(dbId)
         payload.notes = notes
-        context.commit('getAllNotes', payload)
+        commit('getAllNotes', payload)
       }
     } catch (error) {
-      console.log(error)
+      dispatch('toggleErrorDialog', { errorDialog: true, error: error })
     }
   },
 
@@ -28,13 +28,13 @@ export default {
   toggleEditNoteDialog(context) {
     context.commit('toggleEditNoteDialog')
   },
-  async addNewNote(context, payload) {
+  async addNewNote({ commit, dispatch }, payload) {
     try {
       const addedNote = await addNewNote(payload.newNote)
       payload.addedNote = addedNote
-      context.commit('addNewNote', payload)
+      commit('addNewNote', payload)
     } catch (error) {
-      console.log(error)
+      dispatch('toggleErrorDialog', { errorDialog: true, error: error })
     }
   },
 
@@ -42,13 +42,13 @@ export default {
    * Updating Notes
    */
 
-  async updateNote(context, payload) {
+  async updateNote({ commit, dispatch }, payload) {
     try {
       const updatedNote = await updateNote(payload.noteToUpdate)
       payload.updatedNote = updatedNote
-      context.commit('updateNote', payload)
+      commit('updateNote', payload)
     } catch (error) {
-      console.log(error)
+      dispatch('toggleErrorDialog', { errorDialog: true, error: error })
     }
   },
 
@@ -63,12 +63,12 @@ export default {
    * Deleting Notes
    */
 
-  async deleteNote(context, payload) {
+  async deleteNote({ commit, dispatch }, payload) {
     try {
       await deleteNote(payload.noteToDelete)
-      context.commit('deleteNote', payload)
+      commit('deleteNote', payload)
     } catch (error) {
-      console.log(error)
+      dispatch('toggleErrorDialog', { errorDialog: true, error: error })
     }
   },
 
@@ -83,5 +83,8 @@ export default {
    */
   hideCompleted(context, payload) {
     context.commit('hideCompleted', payload)
+  },
+  toggleErrorDialog(context, payload) {
+    context.commit('toggleErrorDialog', payload)
   },
 }

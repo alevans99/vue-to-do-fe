@@ -14,6 +14,7 @@
       <listControls />
       <addNoteDialog />
       <editNoteDialog />
+      <errorDialog />
     </v-main>
   </v-app>
 </template>
@@ -26,6 +27,7 @@ import addNoteDialog from './components/sub-componenets/AddNoteDialog.vue'
 import editNoteDialog from './components/sub-componenets/EditNoteDialog.vue'
 import listControls from './components/sub-componenets/ListControls.vue'
 import backgroundUrl from './assets/back.jpg'
+import errorDialog from './components/sub-componenets/ErrorDialog.vue'
 export default {
   name: 'App',
 
@@ -34,6 +36,7 @@ export default {
     addNoteDialog,
     editNoteDialog,
     listControls,
+    errorDialog,
   },
 
   data: () => ({
@@ -68,6 +71,7 @@ export default {
   created() {
     this.checkAndUpdateDbid()
     this.$store.dispatch('getAllNotes', {})
+    //Add notes loading here to disable the add notes message
   },
 }
 </script>

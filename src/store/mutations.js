@@ -45,4 +45,7 @@ export default {
   hideCompleted(state, payload) {
     state.areCompletedNotesHidded = payload.areCompletedNotesHidded
   },
+  toggleErrorDialog(state, payload) {
+    state.errorDialog = payload.errorDialog
+  },
 }
