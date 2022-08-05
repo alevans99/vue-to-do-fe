@@ -84,7 +84,7 @@ export default {
 }
 
 #app {
-  background-color: var(--v-background-base);
+  background-color: #efb700;
 }
 .green-color {
   background-color: #306b34 !important;
@@ -101,5 +101,8 @@ export default {
   z-index: 2;
   bottom: 0;
   background-color: #fff;
+}
+.row {
+  margin: 0;
 }
 </style>
