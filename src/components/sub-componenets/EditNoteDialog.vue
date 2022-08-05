@@ -82,7 +82,7 @@
             </v-col>
           </v-row>
           <v-row justify="center" v-if="deadlineActive">
-            <v-col cols="6" md="6">
+            <v-col cols="12" sm="6">
               <v-menu
                 ref="dateRef"
                 v-model="datePickerMenu"
@@ -115,7 +115,7 @@
                 </v-date-picker>
               </v-menu>
             </v-col>
-            <v-col cols="6" md="6">
+            <v-col cols="12" sm="6">
               <v-menu
                 ref="timePicker"
                 v-model="timePickerMenu"

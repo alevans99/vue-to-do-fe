@@ -49,7 +49,10 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="6">
+        <v-col
+          cols="6"
+          class="d-flex justify-sm-start justify-center align-center"
+        >
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
