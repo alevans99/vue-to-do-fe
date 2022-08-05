@@ -1,5 +1,7 @@
 import axios from 'axios'
-const dbApi = axios.create({ baseURL: 'http://localhost:9090/api' })
+const dbApi = axios.create({
+  baseURL: 'https://vue-to-do-be.herokuapp.com/api',
+})
 
 export const getAllNotes = async (dbId) => {
   const {
