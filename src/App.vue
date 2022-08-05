@@ -10,7 +10,7 @@
     }"
   >
     <v-main>
-      <NoteListPage />
+      <noteListPage />
       <listControls />
       <addNoteDialog />
       <editNoteDialog />
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import NoteListPage from './components/pages/NoteListPage'
+import noteListPage from './components/pages/NoteListPage.vue'
 import { mapState, mapActions } from 'vuex'
 import dbIdCreation from './utils/dbIdCreation'
 import addNoteDialog from './components/sub-componenets/AddNoteDialog.vue'
@@ -32,7 +32,7 @@ export default {
   name: 'App',
 
   components: {
-    NoteListPage,
+    noteListPage,
     addNoteDialog,
     editNoteDialog,
     listControls,
@@ -76,6 +76,13 @@ export default {
 }
 </script>
 <style>
+* {
+  margin: 0px;
+  padding: 0px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 #app {
   background-color: var(--v-background-base);
 }

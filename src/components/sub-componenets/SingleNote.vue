@@ -174,7 +174,6 @@ export default {
       const daysUntilDeadline = DateTime.fromISO(deadline).diffNow([
         'days',
       ]).days
-      console.log(daysUntilDeadline)
       switch (true) {
         case daysUntilDeadline < 1:
           return 'highAlert'
