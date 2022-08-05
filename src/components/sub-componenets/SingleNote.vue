@@ -55,13 +55,13 @@
               <v-btn
                 class="ma-4"
                 color="primary"
-                dark
                 v-bind="attrs"
                 fab
                 v-on="on"
                 @click="editNote()"
+                :disabled="disableButtons"
               >
-                <v-icon dark> mdi-pencil </v-icon>
+                <v-icon color="white"> mdi-pencil </v-icon>
               </v-btn>
             </template>
             <span>Edit This Note</span>
@@ -74,12 +74,13 @@
                 >
                   <v-btn
                     color="highAlert"
-                    dark
                     v-bind="{ ...dialogAttrs, ...tooltipAttrs }"
                     v-on="{ ...dialogOn, ...tooltipOn }"
                     fab
+                    :loading="deleteInProgress"
+                    :disabled="disableButtons"
                   >
-                    <v-icon dark> mdi-delete </v-icon>
+                    <v-icon color="white"> mdi-delete </v-icon>
                   </v-btn>
                 </template>
                 <span>Delete This Note</span>
@@ -104,12 +105,13 @@
                 :class="`mx-2 ${completeButtonTextColor}--text`"
                 fab
                 color="primary"
-                dark
                 @click="toggleNoteCompletion"
                 v-bind="attrs"
                 v-on="on"
+                :disabled="disableButtons"
+                :loading="changingCompleteStatus"
               >
-                <v-icon dark> {{ completeButtonIcon }} </v-icon>
+                <v-icon color="white"> {{ completeButtonIcon }} </v-icon>
               </v-btn>
             </template>
             <span>{{
@@ -133,6 +135,8 @@ export default {
 
   data: () => ({
     deleteDialog: false,
+    deleteInProgress: false,
+    changingCompleteStatus: false,
   }),
   computed: {
     completeButtonColor() {
@@ -180,6 +184,9 @@ export default {
           return 'secondary'
       }
     },
+    disableButtons() {
+      return this.deleteInProgress || this.changingCompleteStatus
+    },
   },
   methods: {
     ...mapActions([
@@ -194,17 +201,21 @@ export default {
     formatPriorityToString(priorityInt) {
       return formatPriorityToString(priorityInt)
     },
-    toggleNoteCompletion() {
+    async toggleNoteCompletion() {
+      this.changingCompleteStatus = true
       const noteToUpdate = { ...this.note }
       noteToUpdate.complete = !noteToUpdate.complete
-      this.updateNote({ noteToUpdate })
+      await this.updateNote({ noteToUpdate })
+      this.changingCompleteStatus = false
     },
     editNote() {
       this.startEditing({ noteToEdit: this.note })
     },
-    handleDelete() {
-      this.deleteNote({ noteToDelete: this.note })
+    async handleDelete() {
+      this.deleteInProgress = true
       this.deleteDialog = false
+      await this.deleteNote({ noteToDelete: this.note })
+      this.deleteInProgress = false
     },
   },
 }
@@ -214,12 +225,6 @@ export default {
   border-radius: 20px !important;
   border: 5px solid #2e294e !important;
   box-shadow: 0px 10px 14px 2px #2e294e !important;
-  /* box-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
-    0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa !important; */
-  /* border: 0.2rem solid #fff !important;
-  border-radius: 2rem !important;
-  box-shadow: 0 0 0.2rem #fff, 0 0 0.2rem #fff, 0 0 2rem #ff66b3,
-    0 0 0.8rem #ff66b3, 0 0 2.8rem #ff66b3, inset 0 0 1.3rem #ff66b3 !important; */
 }
 
 .complete-note {

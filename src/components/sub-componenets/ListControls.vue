@@ -21,16 +21,16 @@
               <v-btn
                 v-model="sortSpeedDial"
                 color="accent"
-                dark
                 fab
                 elevation="2"
                 x-large
                 class="mb-md-6 my-4"
                 v-bind="attrs"
                 v-on="on"
+                :disabled="areControlsDisabled"
               >
-                <v-icon v-if="sortSpeedDial"> mdi-close </v-icon>
-                <v-icon v-else> {{ sortButtonIcon }} </v-icon>
+                <v-icon v-if="sortSpeedDial" color="white"> mdi-close </v-icon>
+                <v-icon v-else color="white"> {{ sortButtonIcon }} </v-icon>
               </v-btn>
             </template>
             <span>Sort Notes</span>
@@ -40,14 +40,14 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               fab
-              dark
               large
               color="accent"
               v-bind="attrs"
               v-on="on"
               @click="sortNotes({ sortChoice: 'created' })"
+              :disabled="areControlsDisabled"
             >
-              <v-icon>mdi-clock-outline</v-icon>
+              <v-icon color="white">mdi-clock-outline</v-icon>
             </v-btn>
           </template>
           <span>Date Created</span>
@@ -56,14 +56,14 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               fab
-              dark
               large
               color="accent"
               v-bind="attrs"
               v-on="on"
               @click="sortNotes({ sortChoice: 'deadline' })"
+              :disabled="areControlsDisabled"
             >
-              <v-icon>mdi-clipboard-text-clock</v-icon>
+              <v-icon color="white">mdi-clipboard-text-clock</v-icon>
             </v-btn>
           </template>
           <span>Deadline</span>
@@ -72,14 +72,14 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               fab
-              dark
               large
               color="accent"
               v-bind="attrs"
               v-on="on"
               @click="sortNotes({ sortChoice: 'priority' })"
+              :disabled="areControlsDisabled"
             >
-              <v-icon>mdi-alert-octagon</v-icon>
+              <v-icon color="white">mdi-alert-octagon</v-icon>
             </v-btn>
           </template>
           <span>Priority</span>
@@ -89,7 +89,6 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             color="secondary"
-            dark
             fab
             x-large
             elevation="2"
@@ -99,10 +98,11 @@
                 areCompletedNotesHidded: !areCompletedNotesHidded,
               })
             "
+            :disabled="areControlsDisabled"
             v-bind="attrs"
             v-on="on"
           >
-            <v-icon>{{ completedButtonIcon }}</v-icon>
+            <v-icon color="white">{{ completedButtonIcon }}</v-icon>
           </v-btn>
         </template>
         <span>{{
@@ -114,7 +114,6 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             color="primary"
-            dark
             fab
             x-large
             elevation="2"
@@ -122,8 +121,9 @@
             v-bind="attrs"
             v-on="on"
             @click="toggleAddNoteDialog"
+            :disabled="areControlsDisabled"
           >
-            <v-icon>mdi-plus</v-icon>
+            <v-icon color="white">mdi-plus</v-icon>
           </v-btn>
         </template>
         <span>Add a note</span>
@@ -151,6 +151,8 @@ export default {
       showCompleted: (state) => state.showCompleted,
       sortChoice: (state) => state.sortChoice,
       areCompletedNotesHidded: (state) => state.areCompletedNotesHidded,
+      notesLoading: (state) => state.notesLoading,
+      errorFetchingNotes: (state) => state.errorFetchingNotes,
     }),
     ...mapGetters([]),
     completedButtonIcon() {
@@ -167,6 +169,9 @@ export default {
         default:
           return 'mdi-clock-outline'
       }
+    },
+    areControlsDisabled() {
+      return this.notesLoading || this.errorFetchingNotes
     },
   },
 }

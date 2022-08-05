@@ -12,6 +12,7 @@
                 required
                 outlined
                 :rules="createValidation"
+                :disabled="saveInProgress"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -23,6 +24,7 @@
                 label="New Note Text"
                 outlined
                 :rules="createValidation"
+                :disabled="saveInProgress"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -36,6 +38,7 @@
                   dark
                   :color="getPriorityColor('1')"
                   @click="prioritySelected = '1'"
+                  :disabled="saveInProgress"
                 >
                   <v-icon dark> mdi-alert-octagon </v-icon>
                 </v-btn>
@@ -47,6 +50,7 @@
                   dark
                   :color="getPriorityColor('2')"
                   @click="prioritySelected = '2'"
+                  :disabled="saveInProgress"
                 >
                   <v-icon dark> mdi-alert-octagon </v-icon>
                 </v-btn>
@@ -58,6 +62,7 @@
                   dark
                   :color="getPriorityColor('3')"
                   @click="prioritySelected = '3'"
+                  :disabled="saveInProgress"
                 >
                   <v-icon dark> mdi-alert-octagon </v-icon>
                 </v-btn>
@@ -68,8 +73,10 @@
           <v-row justify="start">
             <v-col cols="12">
               <v-switch
+                inset
                 v-model="deadlineActive"
                 label="Set Deadline"
+                :disabled="saveInProgress"
               ></v-switch>
             </v-col>
           </v-row>
@@ -83,6 +90,7 @@
                 offset-y
                 max-width="320px"
                 min-width="320px"
+                :disabled="saveInProgress"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -93,6 +101,7 @@
                     v-bind="attrs"
                     v-on="on"
                     outlined
+                    :disabled="saveInProgress"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -100,6 +109,7 @@
                   v-model="datePicker"
                   full-width
                   @input="datePickerMenu = false"
+                  :disabled="saveInProgress"
                 >
                 </v-date-picker>
               </v-menu>
@@ -114,6 +124,7 @@
                 offset-y
                 max-width="290px"
                 min-width="290px"
+                :disabled="saveInProgress"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -124,6 +135,7 @@
                     v-bind="attrs"
                     v-on="on"
                     outlined
+                    :disabled="saveInProgress"
                   ></v-text-field>
                 </template>
                 <v-time-picker
@@ -132,6 +144,7 @@
                   full-width
                   @click:minute="$refs.timePicker.save(timePicker)"
                   format="24hr"
+                  :disabled="saveInProgress"
                 ></v-time-picker>
               </v-menu>
             </v-col>
@@ -153,6 +166,7 @@
               large
               color="highAlert"
               @click="discardNewNote"
+              :disabled="saveInProgress"
             >
               <v-icon dark> mdi-close </v-icon>
             </v-btn>
@@ -163,7 +177,8 @@
               large
               color="primary"
               @click="saveNewNote"
-              :disabled="saveDisabled"
+              :loading="saveInProgress"
+              :disabled="saveDisabled || saveInProgress"
             >
               <v-icon dark> mdi-content-save </v-icon>
             </v-btn>
@@ -196,6 +211,7 @@ export default {
         return (value !== null && value !== '') || 'Please enter information'
       },
     ],
+    saveInProgress: false,
   }),
   computed: {
     ...mapState({
@@ -230,7 +246,8 @@ export default {
       this.priorityActive = false
       this.prioritySelected = '2'
     },
-    saveNewNote() {
+    async saveNewNote() {
+      this.saveInProgress = true
       const newNote = {
         listId: this.dbId,
         noteTitle: this.newNoteTitle,
@@ -246,8 +263,9 @@ export default {
       } else {
         newNote.deadline = null
       }
-      this.addNewNote({ newNote })
+      await this.addNewNote({ newNote })
       this.deleteUnsavedNote()
+      this.saveInProgress = false
     },
     getPriorityColor(priority) {
       const colors = {

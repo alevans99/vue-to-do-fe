@@ -22,5 +22,5 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-.netlify/*
+/.netlify
 public/_redirects

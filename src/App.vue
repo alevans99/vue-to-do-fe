@@ -70,8 +70,8 @@ export default {
   mounted() {},
   created() {
     this.checkAndUpdateDbid()
+    this.$store.dispatch('updateNotesLoading', { notesLoading: true })
     this.$store.dispatch('getAllNotes', {})
-    //Add notes loading here to disable the add notes message
   },
 }
 </script>

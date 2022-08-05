@@ -13,6 +13,7 @@
                 required
                 outlined
                 :rules="editValidation"
+                :disabled="saveInProgress"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -25,6 +26,7 @@
                 label="New Note Text"
                 outlined
                 :rules="editValidation"
+                :disabled="saveInProgress"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -37,33 +39,33 @@
                 <p class="text-center text-body-1">Low</p>
                 <v-btn
                   fab
-                  dark
                   :color="getPriorityColor(1)"
                   @click="updateNoteField('priority', 1)"
+                  :disabled="saveInProgress"
                 >
-                  <v-icon dark> mdi-alert-octagon </v-icon>
+                  <v-icon color="white"> mdi-alert-octagon </v-icon>
                 </v-btn>
               </div>
               <div class="d-flex justify-center flex-column">
                 <p class="text-center text-body-2">Medium</p>
                 <v-btn
                   fab
-                  dark
                   :color="getPriorityColor(2)"
                   @click="updateNoteField('priority', 2)"
+                  :disabled="saveInProgress"
                 >
-                  <v-icon dark> mdi-alert-octagon </v-icon>
+                  <v-icon color="white"> mdi-alert-octagon </v-icon>
                 </v-btn>
               </div>
               <div class="d-flex justify-center flex-column">
                 <p class="text-center text-body-2">High</p>
                 <v-btn
                   fab
-                  dark
                   :color="getPriorityColor(3)"
                   @click="updateNoteField('priority', 3)"
+                  :disabled="saveInProgress"
                 >
-                  <v-icon dark> mdi-alert-octagon </v-icon>
+                  <v-icon color="white"> mdi-alert-octagon </v-icon>
                 </v-btn>
               </div>
             </v-col>
@@ -72,8 +74,10 @@
           <v-row justify="start">
             <v-col cols="12">
               <v-switch
+                inset
                 v-model="deadlineActive"
                 label="Add Deadline"
+                :disabled="saveInProgress"
               ></v-switch>
             </v-col>
           </v-row>
@@ -87,6 +91,7 @@
                 offset-y
                 max-width="320px"
                 min-width="320px"
+                :disabled="saveInProgress"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -97,6 +102,7 @@
                     v-bind="attrs"
                     v-on="on"
                     outlined
+                    :disabled="saveInProgress"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -104,6 +110,7 @@
                   v-model="datePicker"
                   full-width
                   @input="datePickerMenu = false"
+                  :disabled="saveInProgress"
                 >
                 </v-date-picker>
               </v-menu>
@@ -118,6 +125,7 @@
                 offset-y
                 max-width="290px"
                 min-width="290px"
+                :disabled="saveInProgress"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
@@ -128,6 +136,7 @@
                     v-bind="attrs"
                     v-on="on"
                     outlined
+                    :disabled="saveInProgress"
                   ></v-text-field>
                 </template>
                 <v-time-picker
@@ -136,6 +145,7 @@
                   full-width
                   @click:minute="$refs.timePicker.save(timePicker)"
                   format="24hr"
+                  :disabled="saveInProgress"
                 ></v-time-picker>
               </v-menu>
             </v-col>
@@ -152,21 +162,22 @@
           <div class="d-flex ma-0 pa-8 flex-grow-1 justify-space-between">
             <v-btn
               fab
-              dark
               large
               color="highAlert"
               @click="toggleEditNoteDialog"
+              :disabled="saveInProgress"
             >
-              <v-icon dark> mdi-close </v-icon>
+              <v-icon color="white"> mdi-close </v-icon>
             </v-btn>
             <v-btn
               fab
               large
               color="primary"
               @click="saveNote"
-              :disabled="saveDisabled"
+              :disabled="saveDisabled || saveInProgress"
+              :loading="saveInProgress"
             >
-              <v-icon dark> mdi-content-save </v-icon>
+              <v-icon color="white"> mdi-content-save </v-icon>
             </v-btn>
           </div>
         </div>
@@ -194,6 +205,7 @@ export default {
         return (value !== null && value !== '') || 'Please enter information'
       },
     ],
+    saveInProgress: false,
   }),
   computed: {
     ...mapState({
@@ -245,9 +257,11 @@ export default {
       'updateNote',
       'updateEditNoteField',
     ]),
-    saveNote() {
-      this.updateNote({ noteToUpdate: { ...this.noteToEdit } })
+    async saveNote() {
+      this.saveInProgress = true
+      await this.updateNote({ noteToUpdate: { ...this.noteToEdit } })
       this.toggleEditNoteDialog()
+      this.saveInProgress = false
     },
     updateNoteField(key, value) {
       this.updateEditNoteField({ key, value })

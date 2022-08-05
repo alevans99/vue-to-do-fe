@@ -3,7 +3,14 @@ export default {
     state.dbId = payload.dbId
   },
   getAllNotes(state, payload) {
+    state.notesLoading = false
     state.notes = payload.notes
+  },
+  updateErrorFetchingNotes(state, payload) {
+    state.errorFetchingNotes = payload.errorFetchingNotes
+  },
+  updateNotesLoading(state, payload) {
+    state.notesLoading = payload.notesLoading
   },
   toggleAddNoteDialog(state) {
     state.addNoteDialog = !state.addNoteDialog

@@ -1,27 +1,45 @@
 <template>
   <v-container>
-    <v-row justify="center" align="center" v-if="notesToDisplay.length === 0">
+    <v-row justify="center" align="center" v-if="displayCreateNewNotes">
       <v-col cols="12" md="10" lg="8">
         <h3 class="text-h3 text-center white--text">
           Click
           <span>
             <v-btn
               color="primary"
-              dark
               fab
               large
               elevation="2"
               class="mb-md-6 my-4"
               @click="toggleAddNoteDialog"
             >
-              <v-icon>mdi-plus</v-icon>
+              <v-icon color="white">mdi-plus</v-icon>
             </v-btn></span
           >
           to start adding notes!
         </h3>
       </v-col>
     </v-row>
-
+    <v-row
+      v-if="notesLoading"
+      justify="center"
+      align="center"
+      style="height: 90vh"
+    >
+      <v-col
+        cols="12"
+        md="10"
+        lg="8"
+        class="d-flex justify-center align-center"
+      >
+        <v-progress-circular
+          indeterminate
+          color="primary"
+          :size="100"
+          :width="10"
+        ></v-progress-circular>
+      </v-col>
+    </v-row>
     <v-row v-for="note in notesToDisplay" :key="note.noteId" justify="center">
       <v-col cols="12" md="10" lg="8">
         <SingleNote :note="note" />
@@ -51,8 +69,17 @@ export default {
       dbId: (state) => state.dbId,
       notes: (state) => state.notes,
       areCompletedNotesHidded: (state) => state.areCompletedNotesHidded,
+      notesLoading: (state) => state.notesLoading,
+      errorFetchingNotes: (state) => state.errorFetchingNotes,
     }),
     ...mapGetters(['notesToDisplay']),
+    displayCreateNewNotes() {
+      return (
+        this.notes.length === 0 &&
+        !this.notesLoading &&
+        !this.errorFetchingNotes
+      )
+    },
   },
 }
 </script>

@@ -6,6 +6,8 @@ export default {
   },
 
   async getAllNotes({ commit, dispatch, state }, payload) {
+    commit('updateNotesLoading', { notesLoading: true })
+    commit('updateErrorFetchingNotes', { errorFetchingNotes: false })
     try {
       const dbId = state.dbId
       if (dbId) {
@@ -15,7 +17,13 @@ export default {
       }
     } catch (error) {
       dispatch('toggleErrorDialog', { errorDialog: true, error: error })
+      commit('updateNotesLoading', { notesLoading: false })
+      commit('updateErrorFetchingNotes', { errorFetchingNotes: true })
     }
+  },
+
+  updateNotesLoading({ commit }, payload) {
+    commit('updateNotesLoading', payload)
   },
 
   /**
