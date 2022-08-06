@@ -1,167 +1,186 @@
 <template>
   <div>
-    <v-dialog persistent max-width="800px" :value="editNoteDialog">
-      <v-card class="d-flex flex-column pa-4 pa-sm-10">
-        <!-- Note Title -->
-        <v-row justify="center" class="">
-          <v-col cols="12">
-            <v-text-field
-              :value="noteToEdit.noteTitle"
-              @input="updateNoteField('noteTitle', $event)"
-              label="New Note Title"
-              required
-              full-width
-              outlined
-              :rules="editValidation"
-              :disabled="saveInProgress"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <!-- Note Text -->
-        <v-row justify="center">
-          <v-col cols="12">
-            <v-textarea
-              :value="noteToEdit.noteText"
-              @input="updateNoteField('noteText', $event)"
-              label="New Note Text"
-              outlined
-              :rules="editValidation"
-              :disabled="saveInProgress"
-            ></v-textarea>
-          </v-col>
-        </v-row>
+    <v-dialog
+      persistent
+      max-width="800px"
+      :value="editNoteDialog"
+      v-bind="fullScreenDialog"
+    >
+      <v-card>
+        <v-form class="pa-2 pa-md-4" ref="form">
+          <!-- Note Title -->
+          <v-row justify="center" class="">
+            <v-col cols="12" md="12" class="pa-0">
+              <v-text-field
+                :value="noteToEdit.noteTitle"
+                @input="updateNoteField('noteTitle', $event)"
+                label="New Note Title"
+                required
+                outlined
+                :rules="editValidation"
+                :disabled="saveInProgress"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <!-- Note Text -->
+          <v-row justify="center">
+            <v-col cols="12" md="12" class="pa-0">
+              <v-textarea
+                :value="noteToEdit.noteText"
+                @input="updateNoteField('noteText', $event)"
+                label="New Note Text"
+                outlined
+                :rules="editValidation"
+                :disabled="saveInProgress"
+                no-resize
+                auto-grow
+              ></v-textarea>
+            </v-col>
+          </v-row>
 
-        <!-- Optional Priorities -->
+          <!-- Optional Priorities -->
 
-        <v-row justify="center" class="d-flex">
-          <v-col cols="12" class="d-flex justify-space-around">
-            <div class="d-flex justify-center flex-column">
-              <p class="text-center text-body-1">Low</p>
-              <v-btn
-                fab
-                :color="getPriorityColor(1)"
-                @click="updateNoteField('priority', 1)"
-                :disabled="saveInProgress"
-              >
-                <v-icon color="white"> mdi-alert-octagon </v-icon>
-              </v-btn>
-            </div>
-            <div class="d-flex justify-center flex-column">
-              <p class="text-center text-body-2">Medium</p>
-              <v-btn
-                fab
-                :color="getPriorityColor(2)"
-                @click="updateNoteField('priority', 2)"
-                :disabled="saveInProgress"
-              >
-                <v-icon color="white"> mdi-alert-octagon </v-icon>
-              </v-btn>
-            </div>
-            <div class="d-flex justify-center flex-column">
-              <p class="text-center text-body-2">High</p>
-              <v-btn
-                fab
-                :color="getPriorityColor(3)"
-                @click="updateNoteField('priority', 3)"
-                :disabled="saveInProgress"
-              >
-                <v-icon color="white"> mdi-alert-octagon </v-icon>
-              </v-btn>
-            </div>
-          </v-col>
-        </v-row>
-        <!-- Optional Deadline Setter -->
-        <v-row justify="start">
-          <v-col cols="12">
-            <v-switch
-              inset
-              v-model="deadlineActive"
-              label="Add Deadline"
-              :disabled="saveInProgress"
-            ></v-switch>
-          </v-col>
-        </v-row>
-        <v-row justify="center" v-if="deadlineActive">
-          <v-col cols="12" sm="6">
-            <v-menu
-              ref="dateRef"
-              v-model="datePickerMenu"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              max-width="320px"
-              min-width="320px"
-              :disabled="saveInProgress"
+          <v-row justify="center" class="d-flex">
+            <v-col cols="12" class="d-flex justify-space-around pa-0">
+              <div class="d-flex justify-center flex-column align-center">
+                <p class="text-center text-body-2 text-sm-body-1">Low</p>
+                <v-btn
+                  fab
+                  v-bind="prioritybuttonSize"
+                  :color="getPriorityColor(1)"
+                  @click="updateNoteField('priority', 1)"
+                  :disabled="saveInProgress"
+                >
+                  <v-icon color="white"> mdi-alert-octagon </v-icon>
+                </v-btn>
+              </div>
+              <div class="d-flex flex-column justify-center align-center">
+                <p class="text-center text-body-2 text-sm-body-1">Medium</p>
+                <v-btn
+                  fab
+                  v-bind="prioritybuttonSize"
+                  :color="getPriorityColor(2)"
+                  @click="updateNoteField('priority', 2)"
+                  :disabled="saveInProgress"
+                >
+                  <v-icon color="white"> mdi-alert-octagon </v-icon>
+                </v-btn>
+              </div>
+              <div class="d-flex justify-center flex-column align-center">
+                <p class="text-center text-body-2 text-sm-body-1">High</p>
+                <v-btn
+                  fab
+                  v-bind="prioritybuttonSize"
+                  :color="getPriorityColor(3)"
+                  @click="updateNoteField('priority', 3)"
+                  :disabled="saveInProgress"
+                >
+                  <v-icon color="white"> mdi-alert-octagon </v-icon>
+                </v-btn>
+              </div>
+            </v-col>
+          </v-row>
+          <!-- Optional Deadline Setter -->
+          <v-row justify="start">
+            <v-col
+              cols="12"
+              class="pa-0 mx-1 ma-md-4 d-flex justify-center justify-md-start"
             >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
+              <v-switch
+                inset
+                v-model="deadlineActive"
+                label="Add Deadline"
+                :disabled="saveInProgress"
+              ></v-switch>
+            </v-col>
+          </v-row>
+          <v-row justify="center" v-if="deadlineActive">
+            <v-col cols="12" sm="6" class="pa-1 pa-md-3">
+              <v-menu
+                ref="dateRef"
+                v-model="datePickerMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                max-width="320px"
+                :disabled="saveInProgress"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="datePicker"
+                    label="Set Date"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                    :disabled="saveInProgress"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-if="datePickerMenu"
                   v-model="datePicker"
-                  label="Set Date"
-                  prepend-icon="mdi-calendar"
-                  readonly
-                  v-bind="attrs"
-                  v-on="on"
-                  outlined
+                  full-width
+                  @input="datePickerMenu = false"
                   :disabled="saveInProgress"
-                ></v-text-field>
-              </template>
-              <v-date-picker
-                v-if="datePickerMenu"
-                v-model="datePicker"
-                full-width
-                @input="datePickerMenu = false"
+                >
+                </v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col cols="12" sm="6" class="pa-1 pa-md-3">
+              <v-menu
+                ref="timePicker"
+                v-model="timePickerMenu"
+                :close-on-content-click="false"
+                :return-value.sync="timePicker"
+                transition="scale-transition"
+                max-width="290px"
                 :disabled="saveInProgress"
               >
-              </v-date-picker>
-            </v-menu>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-menu
-              ref="timePicker"
-              v-model="timePickerMenu"
-              :close-on-content-click="false"
-              :return-value.sync="timePicker"
-              transition="scale-transition"
-              offset-y
-              max-width="290px"
-              min-width="290px"
-              :disabled="saveInProgress"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="timePicker"
+                    label="Set Time"
+                    prepend-icon="mdi-clock-time-four-outline"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                    outlined
+                    :disabled="saveInProgress"
+                  ></v-text-field>
+                </template>
+                <v-time-picker
+                  v-if="timePickerMenu"
                   v-model="timePicker"
-                  label="Set Time"
-                  prepend-icon="mdi-clock-time-four-outline"
-                  readonly
-                  v-bind="attrs"
-                  v-on="on"
-                  outlined
+                  full-width
+                  @click:minute="$refs.timePicker.save(timePicker)"
+                  format="24hr"
                   :disabled="saveInProgress"
-                ></v-text-field>
-              </template>
-              <v-time-picker
-                v-if="timePickerMenu"
-                v-model="timePicker"
-                full-width
-                @click:minute="$refs.timePicker.save(timePicker)"
-                format="24hr"
-                :disabled="saveInProgress"
-              ></v-time-picker>
-            </v-menu>
-          </v-col>
-          <v-col cols="12"
-            ><h5 class="text-h5 text-center">{{ deadlineText }}</h5>
-          </v-col>
-        </v-row>
+                ></v-time-picker>
+              </v-menu>
+            </v-col>
+            <v-col cols="12" class="pa-0"
+              ><h5 class="text-body-1 text-sm-h6 text-md-h5 text-center">
+                {{ deadlineText }}
+              </h5>
+            </v-col>
+          </v-row>
+        </v-form>
       </v-card>
       <!-- Form Controls -->
       <v-card-actions id="form-controls">
         <div class="d-flex flex-column flex-grow-1">
           <v-divider></v-divider>
-          <div class="d-flex ma-0 pa-8 flex-grow-1 justify-space-between">
+          <div
+            class="
+              d-flex
+              ma-0
+              pa-2 pa-sm-3 pa-md-6 pa-lg-8
+              justify-space-around
+            "
+          >
             <v-btn
               fab
-              large
+              v-bind="buttonSize"
               color="highAlert"
               @click="toggleEditNoteDialog"
               :disabled="saveInProgress"
@@ -170,7 +189,7 @@
             </v-btn>
             <v-btn
               fab
-              large
+              v-bind="buttonSize"
               color="primary"
               @click="saveNote"
               :disabled="saveDisabled || saveInProgress"
@@ -223,6 +242,36 @@ export default {
     },
     saveDisabled() {
       return this.noteToEdit.noteTitle === '' || this.noteToEdit.noteText === ''
+    },
+    prioritybuttonSize() {
+      const size = {
+        xs: 'x-small',
+        sm: 'small',
+        md: '',
+        lg: '',
+        xl: '',
+      }[this.$vuetify.breakpoint.name]
+      return size ? { [size]: true } : {}
+    },
+    buttonSize() {
+      const size = {
+        xs: 'small',
+        sm: '',
+        md: 'large',
+        lg: 'large',
+        xl: 'large',
+      }[this.$vuetify.breakpoint.name]
+      return size ? { [size]: true } : {}
+    },
+    fullScreenDialog() {
+      const size = {
+        xs: 'fullscreen',
+        sm: 'fullscreen',
+        md: '',
+        lg: '',
+        xl: '',
+      }[this.$vuetify.breakpoint.name]
+      return size ? { [size]: true } : {}
     },
   },
   watch: {

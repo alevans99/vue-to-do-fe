@@ -5,15 +5,16 @@
         d-flex
         flex-row flex-md-column
         fixed
-        px-6
         justify-space-around justify-md-center
         align-center
+        mr-md-6 mr-0
       "
     >
       <v-speed-dial
         v-model="sortSpeedDial"
         direction="top"
         transition="slide-y-reverse-transition"
+        class="my-2 mb-md-6"
       >
         <template v-slot:activator>
           <v-tooltip left>
@@ -23,9 +24,7 @@
                 color="accent"
                 fab
                 elevation="2"
-                x-large
-                class="mb-md-6 my-4"
-                v-bind="attrs"
+                v-bind="(attrs, buttonSize)"
                 v-on="on"
                 :disabled="areControlsDisabled"
               >
@@ -40,9 +39,8 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               fab
-              large
               color="accent"
-              v-bind="attrs"
+              v-bind="(attrs, speedDialSize)"
               v-on="on"
               @click="sortNotes({ sortChoice: 'created' })"
               :disabled="areControlsDisabled"
@@ -56,9 +54,8 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               fab
-              large
               color="accent"
-              v-bind="attrs"
+              v-bind="(attrs, speedDialSize)"
               v-on="on"
               @click="sortNotes({ sortChoice: 'deadline' })"
               :disabled="areControlsDisabled"
@@ -72,9 +69,8 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               fab
-              large
               color="accent"
-              v-bind="attrs"
+              v-bind="(attrs, speedDialSize)"
               v-on="on"
               @click="sortNotes({ sortChoice: 'priority' })"
               :disabled="areControlsDisabled"
@@ -90,16 +86,15 @@
           <v-btn
             color="secondary"
             fab
-            x-large
             elevation="2"
-            class="mb-md-6 my-4"
+            class="mb-md-6 my-2"
             @click="
               hideCompleted({
                 areCompletedNotesHidded: !areCompletedNotesHidded,
               })
             "
             :disabled="areControlsDisabled"
-            v-bind="attrs"
+            v-bind="(attrs, buttonSize)"
             v-on="on"
           >
             <v-icon color="white">{{ completedButtonIcon }}</v-icon>
@@ -115,10 +110,9 @@
           <v-btn
             color="primary"
             fab
-            x-large
             elevation="2"
-            class="mb-md-6 my-4"
-            v-bind="attrs"
+            class="mb-md-6 my-2"
+            v-bind="(attrs, buttonSize)"
             v-on="on"
             @click="toggleAddNoteDialog"
             :disabled="areControlsDisabled"
@@ -172,6 +166,26 @@ export default {
     },
     areControlsDisabled() {
       return this.notesLoading || this.errorFetchingNotes
+    },
+    buttonSize() {
+      const size = {
+        xs: '',
+        sm: 'large',
+        md: 'x-large',
+        lg: 'x-large',
+        xl: 'x-large',
+      }[this.$vuetify.breakpoint.name]
+      return size ? { [size]: true } : {}
+    },
+    speedDialSize() {
+      const size = {
+        xs: 'small',
+        sm: '',
+        md: '',
+        lg: '',
+        xl: '',
+      }[this.$vuetify.breakpoint.name]
+      return size ? { [size]: true } : {}
     },
   },
 }

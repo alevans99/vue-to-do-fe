@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pa-0 mb-16 mb-md-0">
     <v-row justify="center" align="center" v-if="displayCreateNewNotes">
       <v-col cols="12" md="10" lg="8">
         <h3 class="text-h3 text-center white--text">
@@ -40,8 +40,13 @@
         ></v-progress-circular>
       </v-col>
     </v-row>
-    <v-row v-for="note in notesToDisplay" :key="note.noteId" justify="center">
-      <v-col cols="12" md="10" lg="8">
+    <v-row
+      v-for="note in notesToDisplay"
+      :key="note.noteId"
+      justify="center"
+      class="ma-0"
+    >
+      <v-col cols="12" md="10" lg="8" class="pa-1 pa-sm-2">
         <SingleNote :note="note" />
       </v-col>
     </v-row>
@@ -59,7 +64,6 @@ export default {
   data: () => ({}),
   methods: {
     displayNotes() {
-      console.log('Note length', this.notes.length)
       return this.notes.length > 0
     },
     ...mapActions(['toggleAddNoteDialog']),

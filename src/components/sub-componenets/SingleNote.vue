@@ -1,28 +1,45 @@
 <template>
   <v-card :class="`${noteBackground}`">
-    <v-container>
+    <v-container class="pa-0">
       <v-row class="">
-        <v-col cols="9" class="pb-0">
+        <v-col
+          cols="12"
+          sm="9"
+          class="pa-1 pa-md-2 pa-lg-4"
+          order="2"
+          order-sm="1"
+        >
           <div class="d-flex flex-column" style="">
             <!-- Was 260px height -->
-            <h4 class="ma-4 text-h4">
+            <h4
+              class="ma-1 ma-md-2 ma-lg-3 text-subtitle-1 text-sm-h5 text-md-h4"
+            >
               {{ note.noteTitle || 'Untitled Note' }}
             </h4>
-            <p class="mx-4 body-1 overflow-auto" style="white-space: pre-line">
+            <p
+              class="
+                mx-1 mx-md-2 mx-lg-3
+                text-body-2 text-md-body-1
+                overflow-auto
+                mb-0
+              "
+              style="white-space: pre-line"
+            >
               {{ note.noteText || 'This note is blank.' }}
             </p>
           </div>
         </v-col>
-        <v-col cols="3">
-          <div class="d-flex flex-column align-end">
+        <v-col
+          cols="12"
+          sm="3"
+          order="1"
+          order-sm="2"
+          class="pa-1 pb-0 pa-sm-2 pa-md-4"
+        >
+          <div class="d-flex flex-sm-column align-sm-end justify-end">
             <v-tooltip left>
               <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  x-large
-                  :color="alertColor"
-                  class="ma-2"
-                  v-bind="attrs"
-                  v-on="on"
+                <v-icon :color="alertColor" v-bind="(attrs, iconSize)" v-on="on"
                   >mdi-alert-octagon</v-icon
                 >
               </template>
@@ -35,10 +52,8 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
                   v-if="note.deadline"
-                  x-large
                   :color="deadlineColor"
-                  class="ma-2"
-                  v-bind="attrs"
+                  v-bind="(attrs, iconSize)"
                   v-on="on"
                   >mdi-clipboard-text-clock</v-icon
                 >
@@ -51,14 +66,14 @@
       <v-row>
         <v-col
           cols="6"
-          class="d-flex justify-sm-start justify-center align-center"
+          class="d-flex justify-sm-start align-center pa-1 pa-lg-2"
         >
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                class="ma-4"
+                class="ma-1 ma-md-2 ma-lg-4"
                 color="primary"
-                v-bind="attrs"
+                v-bind="(attrs, buttonSize)"
                 fab
                 v-on="on"
                 @click="editNote()"
@@ -77,7 +92,7 @@
                 >
                   <v-btn
                     color="highAlert"
-                    v-bind="{ ...dialogAttrs, ...tooltipAttrs }"
+                    v-bind="{ ...buttonSize, ...dialogAttrs, ...tooltipAttrs }"
                     v-on="{ ...dialogOn, ...tooltipOn }"
                     fab
                     :loading="deleteInProgress"
@@ -101,7 +116,7 @@
             </v-card>
           </v-dialog>
         </v-col>
-        <v-col cols="6" class="d-flex justify-end align-center">
+        <v-col cols="6" class="d-flex justify-end align-center pa-1 pa-lg-2">
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -109,7 +124,7 @@
                 fab
                 color="primary"
                 @click="toggleNoteCompletion"
-                v-bind="attrs"
+                v-bind="(attrs, buttonSize)"
                 v-on="on"
                 :disabled="disableButtons"
                 :loading="changingCompleteStatus"
@@ -188,6 +203,32 @@ export default {
     },
     disableButtons() {
       return this.deleteInProgress || this.changingCompleteStatus
+    },
+    size() {
+      const size = { xs: 'x-small', sm: 'small', lg: 'large', xl: 'x-large' }[
+        this.$vuetify.breakpoint.name
+      ]
+      return size ? { [size]: true } : {}
+    },
+    iconSize() {
+      const size = {
+        xs: '',
+        sm: 'large',
+        md: 'large',
+        lg: 'large',
+        xl: 'x-large',
+      }[this.$vuetify.breakpoint.name]
+      return size ? { [size]: true } : {}
+    },
+    buttonSize() {
+      const size = {
+        xs: 'x-small',
+        sm: 'small',
+        md: '',
+        lg: '',
+        xl: '',
+      }[this.$vuetify.breakpoint.name]
+      return size ? { [size]: true } : {}
     },
   },
   methods: {

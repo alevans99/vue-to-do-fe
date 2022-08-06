@@ -1,11 +1,16 @@
 <template>
   <v-row justify="center" class="ma-0">
-    <v-dialog persistent max-width="800px" :value="addNoteDialog">
+    <v-dialog
+      persistent
+      max-width="800px"
+      :value="addNoteDialog"
+      v-bind="fullScreenDialog"
+    >
       <v-card>
-        <v-form class="pa-10" ref="form">
+        <v-form class="pa-2 pa-md-4" ref="form">
           <!-- Note Title -->
           <v-row justify="center">
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="12" class="pa-0">
               <v-text-field
                 v-model="newNoteTitle"
                 label="New Note Title"
@@ -18,60 +23,65 @@
           </v-row>
           <!-- Note Text -->
           <v-row justify="center">
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="12" class="pa-0">
               <v-textarea
                 v-model="newNoteText"
                 label="New Note Text"
                 outlined
                 :rules="createValidation"
                 :disabled="saveInProgress"
+                no-resize
+                auto-grow
               ></v-textarea>
             </v-col>
           </v-row>
           <!-- Optional Priorities -->
           <v-row justify="center" class="d-flex">
-            <v-col cols="12" class="d-flex justify-space-around">
-              <div class="d-flex justify-center flex-column">
-                <p class="text-center text-body-1">Low</p>
+            <v-col cols="12" class="d-flex justify-space-around pa-0">
+              <div class="d-flex justify-center flex-column align-center">
+                <p class="text-center text-body-2 text-sm-body-1">Low</p>
                 <v-btn
                   fab
-                  dark
+                  v-bind="prioritybuttonSize"
                   :color="getPriorityColor('1')"
                   @click="prioritySelected = '1'"
                   :disabled="saveInProgress"
                 >
-                  <v-icon dark> mdi-alert-octagon </v-icon>
+                  <v-icon color="white"> mdi-alert-octagon </v-icon>
                 </v-btn>
               </div>
-              <div class="d-flex justify-center flex-column">
-                <p class="text-center text-body-2">Medium</p>
+              <div class="d-flex flex-column justify-center align-center">
+                <p class="text-center text-body-2 text-sm-body-1">Medium</p>
                 <v-btn
                   fab
-                  dark
+                  v-bind="prioritybuttonSize"
                   :color="getPriorityColor('2')"
                   @click="prioritySelected = '2'"
                   :disabled="saveInProgress"
                 >
-                  <v-icon dark> mdi-alert-octagon </v-icon>
+                  <v-icon color="white"> mdi-alert-octagon </v-icon>
                 </v-btn>
               </div>
-              <div class="d-flex justify-center flex-column">
-                <p class="text-center text-body-2">High</p>
+              <div class="d-flex justify-center flex-column align-center">
+                <p class="text-center text-body-2 text-sm-body-1">High</p>
                 <v-btn
                   fab
-                  dark
+                  v-bind="prioritybuttonSize"
                   :color="getPriorityColor('3')"
                   @click="prioritySelected = '3'"
                   :disabled="saveInProgress"
                 >
-                  <v-icon dark> mdi-alert-octagon </v-icon>
+                  <v-icon color="white"> mdi-alert-octagon </v-icon>
                 </v-btn>
               </div>
             </v-col>
           </v-row>
           <!-- Optional Deadline Setter -->
           <v-row justify="start">
-            <v-col cols="12">
+            <v-col
+              cols="12"
+              class="pa-0 mx-1 ma-md-4 d-flex justify-center justify-md-start"
+            >
               <v-switch
                 inset
                 v-model="deadlineActive"
@@ -81,15 +91,13 @@
             </v-col>
           </v-row>
           <v-row justify="center" v-if="deadlineActive">
-            <v-col cols="12" sm="6">
+            <v-col cols="12" sm="6" class="pa-1 pa-md-3">
               <v-menu
                 ref="dateRef"
                 v-model="datePickerMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
-                offset-y
                 max-width="320px"
-                min-width="320px"
                 :disabled="saveInProgress"
               >
                 <template v-slot:activator="{ on, attrs }">
@@ -114,16 +122,14 @@
                 </v-date-picker>
               </v-menu>
             </v-col>
-            <v-col cols="612" sm="6">
+            <v-col cols="12" sm="6" class="pa-1 pa-md-3">
               <v-menu
                 ref="timePicker"
                 v-model="timePickerMenu"
                 :close-on-content-click="false"
                 :return-value.sync="timePicker"
                 transition="scale-transition"
-                offset-y
                 max-width="290px"
-                min-width="290px"
                 :disabled="saveInProgress"
               >
                 <template v-slot:activator="{ on, attrs }">
@@ -148,8 +154,10 @@
                 ></v-time-picker>
               </v-menu>
             </v-col>
-            <v-col cols="12"
-              ><h5 class="text-h5 text-center">{{ deadlineText }}</h5>
+            <v-col cols="12" class="pa-0"
+              ><h5 class="text-body-1 text-sm-h6 text-md-h5 text-center">
+                {{ deadlineText }}
+              </h5>
             </v-col>
           </v-row>
         </v-form>
@@ -158,29 +166,35 @@
       <v-card-actions id="form-controls">
         <div class="d-flex flex-column flex-grow-1">
           <v-divider></v-divider>
-          <div class="d-flex ma-0 pa-8 flex-grow-1 justify-space-between">
+          <div
+            class="
+              d-flex
+              ma-0
+              pa-2 pa-sm-3 pa-md-6 pa-lg-8
+              justify-space-around
+            "
+          >
             <v-btn
               class="mx-2"
               fab
-              dark
-              large
+              v-bind="buttonSize"
               color="highAlert"
               @click="discardNewNote"
               :disabled="saveInProgress"
             >
-              <v-icon dark> mdi-close </v-icon>
+              <v-icon color="white"> mdi-close </v-icon>
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn
               class="mx-2"
               fab
-              large
               color="primary"
+              v-bind="buttonSize"
               @click="saveNewNote"
               :loading="saveInProgress"
               :disabled="saveDisabled || saveInProgress"
             >
-              <v-icon dark> mdi-content-save </v-icon>
+              <v-icon color="white"> mdi-content-save </v-icon>
             </v-btn>
           </div>
         </div>
@@ -227,6 +241,36 @@ export default {
     },
     saveDisabled() {
       return this.newNoteTitle === '' || this.newNoteText === ''
+    },
+    prioritybuttonSize() {
+      const size = {
+        xs: 'x-small',
+        sm: 'small',
+        md: '',
+        lg: '',
+        xl: '',
+      }[this.$vuetify.breakpoint.name]
+      return size ? { [size]: true } : {}
+    },
+    buttonSize() {
+      const size = {
+        xs: 'small',
+        sm: '',
+        md: 'large',
+        lg: 'large',
+        xl: 'large',
+      }[this.$vuetify.breakpoint.name]
+      return size ? { [size]: true } : {}
+    },
+    fullScreenDialog() {
+      const size = {
+        xs: 'fullscreen',
+        sm: 'fullscreen',
+        md: '',
+        lg: '',
+        xl: '',
+      }[this.$vuetify.breakpoint.name]
+      return size ? { [size]: true } : {}
     },
   },
   methods: {
