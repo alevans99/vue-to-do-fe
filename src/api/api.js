@@ -1,6 +1,6 @@
 import axios from 'axios'
 const dbApi = axios.create({
-  baseURL: 'https://vue-to-do-be.herokuapp.com/api',
+  baseURL: 'https://vue-to-do-be.up.railway.app/api',
 })
 
 export const getAllNotes = async (dbId) => {
